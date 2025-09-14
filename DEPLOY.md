@@ -22,9 +22,9 @@ sudo systemctl enable postgresql
 ### 4. Создание базы данных
 ```bash
 sudo -u postgres psql
-CREATE DATABASE loyalty_db;
-CREATE USER loyalty_user WITH PASSWORD 'secure_password';
-GRANT ALL PRIVILEGES ON DATABASE loyalty_db TO loyalty_user;
+CREATE DATABASE bonus_engine_db;
+CREATE USER bonus_engine_user WITH PASSWORD 'secure_password';
+GRANT ALL PRIVILEGES ON DATABASE bonus_engine_db TO bonus_engine_user;
 \q
 ```
 
@@ -45,13 +45,13 @@ sudo apt install certbot python3-certbot-nginx -y
 ### 1. Клонирование репозитория
 ```bash
 cd /var/www
-sudo git clone <your-repo-url> loyalty-app
-sudo chown -R www-data:www-data loyalty-app
+sudo git clone <your-repo-url> bonus-engine
+sudo chown -R www-data:www-data bonus-engine
 ```
 
 ### 2. Настройка виртуального окружения
 ```bash
-cd loyalty-app
+cd bonus-engine
 python3.11 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -72,7 +72,7 @@ alembic upgrade head
 
 ### 5. Создание systemd сервиса для бэкенда
 ```bash
-sudo nano /etc/systemd/system/loyalty-backend.service
+sudo nano /etc/systemd/system/bonus-engine-backend.service
 ```
 
 Содержимое файла:
@@ -84,9 +84,9 @@ After=network.target
 [Service]
 Type=simple
 User=www-data
-WorkingDirectory=/var/www/loyalty-app/backend
-Environment=PATH=/var/www/loyalty-app/venv/bin
-ExecStart=/var/www/loyalty-app/venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000
+WorkingDirectory=/var/www/bonus-engine/backend
+Environment=PATH=/var/www/bonus-engine/venv/bin
+ExecStart=/var/www/bonus-engine/venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000
 Restart=always
 
 [Install]
@@ -95,7 +95,7 @@ WantedBy=multi-user.target
 
 ### 6. Создание systemd сервиса для бота
 ```bash
-sudo nano /etc/systemd/system/loyalty-bot.service
+sudo nano /etc/systemd/system/bonus-engine-bot.service
 ```
 
 Содержимое файла:
@@ -107,9 +107,9 @@ After=network.target
 [Service]
 Type=simple
 User=www-data
-WorkingDirectory=/var/www/loyalty-app/bot
-Environment=PATH=/var/www/loyalty-app/venv/bin
-ExecStart=/var/www/loyalty-app/venv/bin/python main.py
+WorkingDirectory=/var/www/bonus-engine/bot
+Environment=PATH=/var/www/bonus-engine/venv/bin
+ExecStart=/var/www/bonus-engine/venv/bin/python main.py
 Restart=always
 
 [Install]
@@ -119,17 +119,17 @@ WantedBy=multi-user.target
 ### 7. Запуск сервисов
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable loyalty-backend
-sudo systemctl enable loyalty-bot
-sudo systemctl start loyalty-backend
-sudo systemctl start loyalty-bot
+sudo systemctl enable bonus-engine-backend
+sudo systemctl enable bonus-engine-bot
+sudo systemctl start bonus-engine-backend
+sudo systemctl start bonus-engine-bot
 ```
 
 ## Настройка Nginx
 
 ### 1. Создание конфигурации сайта
 ```bash
-sudo nano /etc/nginx/sites-available/loyalty-app
+sudo nano /etc/nginx/sites-available/bonus-engine
 ```
 
 Содержимое файла:
@@ -140,7 +140,7 @@ server {
 
     # Frontend static files
     location / {
-        root /var/www/loyalty-app/frontend;
+        root /var/www/bonus-engine/frontend;
         index index.html;
         try_files $uri $uri/ /index.html;
     }
@@ -183,7 +183,7 @@ server {
 
 ### 2. Активация сайта
 ```bash
-sudo ln -s /etc/nginx/sites-available/loyalty-app /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/bonus-engine /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
 ```
@@ -206,8 +206,8 @@ sudo crontab -e
 
 ### 1. Просмотр логов сервисов
 ```bash
-sudo journalctl -u loyalty-backend -f
-sudo journalctl -u loyalty-bot -f
+sudo journalctl -u bonus-engine-backend -f
+sudo journalctl -u bonus-engine-bot -f
 ```
 
 ### 2. Просмотр логов Nginx
@@ -218,8 +218,8 @@ sudo tail -f /var/log/nginx/error.log
 
 ### 3. Мониторинг статуса сервисов
 ```bash
-sudo systemctl status loyalty-backend
-sudo systemctl status loyalty-bot
+sudo systemctl status bonus-engine-backend
+sudo systemctl status bonus-engine-bot
 sudo systemctl status nginx
 sudo systemctl status postgresql
 ```
@@ -246,25 +246,25 @@ alembic upgrade head
 
 ### 4. Перезапуск сервисов
 ```bash
-sudo systemctl restart loyalty-backend
-sudo systemctl restart loyalty-bot
+sudo systemctl restart bonus-engine-backend
+sudo systemctl restart bonus-engine-bot
 ```
 
 ## Резервное копирование
 
 ### 1. Скрипт бэкапа базы данных
 ```bash
-sudo nano /usr/local/bin/backup-loyalty-db.sh
+sudo nano /usr/local/bin/backup-bonus-engine-db.sh
 ```
 
 Содержимое:
 ```bash
 #!/bin/bash
 DATE=$(date +%Y%m%d_%H%M%S)
-BACKUP_DIR="/var/backups/loyalty"
+BACKUP_DIR="/var/backups/bonus-engine"
 mkdir -p $BACKUP_DIR
 
-pg_dump -h localhost -U loyalty_user loyalty_db > $BACKUP_DIR/loyalty_db_$DATE.sql
+pg_dump -h localhost -U bonus_engine_user bonus_engine_db > $BACKUP_DIR/bonus_engine_db_$DATE.sql
 find $BACKUP_DIR -name "*.sql" -mtime +7 -delete
 ```
 
@@ -272,7 +272,7 @@ find $BACKUP_DIR -name "*.sql" -mtime +7 -delete
 ```bash
 sudo crontab -e
 # Добавьте строку:
-0 2 * * * /usr/local/bin/backup-loyalty-db.sh
+0 2 * * * /usr/local/bin/backup-bonus-engine-db.sh
 ```
 
 ## Безопасность
@@ -299,14 +299,14 @@ sudo apt update && sudo apt upgrade -y
 
 ### 1. Проверка статуса сервисов
 ```bash
-sudo systemctl status loyalty-backend
-sudo systemctl status loyalty-bot
+sudo systemctl status bonus-engine-backend
+sudo systemctl status bonus-engine-bot
 ```
 
 ### 2. Проверка логов
 ```bash
-sudo journalctl -u loyalty-backend --since "1 hour ago"
-sudo journalctl -u loyalty-bot --since "1 hour ago"
+sudo journalctl -u bonus-engine-backend --since "1 hour ago"
+sudo journalctl -u bonus-engine-bot --since "1 hour ago"
 ```
 
 ### 3. Проверка подключения к базе данных
