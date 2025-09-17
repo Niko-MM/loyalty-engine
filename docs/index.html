@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Loyalty App</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="public/pwa/icons/icon-192.png">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            background: #000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #fff;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            width: 100vw;
+            max-width: 480px;
+            min-height: 100vh;
+            margin: 0 auto;
+            padding: 0 0 120px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .main-content {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .main-content.overlay-active {
+            opacity: 0.3;
+            transform: scale(0.95);
+            filter: blur(2px);
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 60px auto 40px auto;
+            border-radius: 30px;
+            object-fit: cover;
+            box-shadow: 0 20px 60px rgba(255,255,255,0.08);
+            animation: logoFloat 3s ease-in-out infinite;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-15px) scale(1.02); }
+        }
+
+        .username {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
+            text-align: center;
+            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .points {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            text-align: center;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .qr-container {
+            background: rgba(255,255,255,0.03);
+            padding: 32px;
+            border-radius: 24px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .qr-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            background: #fff;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #333;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .qr-code:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .cafe-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .cafe-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .cafe-content {
+            background: rgba(0,0,0,0.95);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 360px;
+            width: 90%;
+            text-align: center;
+            transform: translateY(50px) scale(0.9);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(30px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .cafe-overlay.active .cafe-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .cafe-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cafe-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 30px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .close-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.1);
+        }
+
+        .bottom-menu {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            padding: 20px 16px 40px 16px;
+            z-index: 10;
+            backdrop-filter: blur(30px);
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .menu-btn {
+            flex: 1 1 0;
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 16px;
+            padding: 20px 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+            letter-spacing: -0.3px;
+            text-align: center;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .menu-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .menu-btn:active::before {
+            left: 100%;
+        }
+
+        .menu-btn:active {
+            transform: scale(0.96);
+            background: rgba(255,255,255,0.12);
+        }
+
+        .menu-btn.active {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.3);
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+
+        .action-btn {
+            flex: 1 1 0;
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 16px;
+            padding: 20px 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+            letter-spacing: -0.3px;
+            text-align: center;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .action-btn:active::before {
+            left: 100%;
+        }
+
+        .action-btn:active {
+            transform: scale(0.96);
+            background: rgba(255,255,255,0.12);
+        }
+
+        .action-btn.active {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.3);
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+
+        .action-btn .icon {
+            font-size: 1.4rem;
+            margin-bottom: 2px;
+        }
+
+        .action-btn span {
+            font-size: 0.85rem;
+            font-weight: 400;
+        }
+
+        @media (min-width: 481px) {
+            .container { 
+                max-width: 420px; 
+            }
+            .bottom-menu { 
+                max-width: 420px; 
+                margin: 0 auto; 
+                left: 50%; 
+                transform: translateX(-50%); 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-content" id="mainContent">
+            <img src="public/images/logo/logo.png" alt="Логотип" class="logo" id="logo">
+            <div class="username" id="username">@username</div>
+            <div class="points" id="points">0 баллов</div>
+            <div class="qr-container">
+                <div class="qr-code" id="qr-code">QR</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="cafe-overlay" id="cafeOverlay">
+        <button class="close-btn" id="closeBtn">×</button>
+        <div class="cafe-content">
+            <div class="cafe-title">О нашем кафе</div>
+            <div class="cafe-text" id="cafeText">Загрузка информации...</div>
+        </div>
+    </div>
+    
+    <div class="bottom-menu">
+        <button class="menu-btn" id="history-btn">История покупок</button>
+        <button id="cafe-btn" class="action-btn">
+            <i class="icon">☕</i>
+            <span>О кафе</span>
+        </button>
+        <button class="menu-btn" id="loyalty-btn">Система лояльности</button>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
