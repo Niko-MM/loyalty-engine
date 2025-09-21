@@ -59,8 +59,8 @@ function generateQRCode(data) {
     try {
         new QRCode(qrCodeEl, {
             text: String(data ?? ''),
-            width: 200,
-            height: 200,
+            width: 180,
+            height: 180,
             colorDark: '#000000',
             colorLight: '#ffffff',
             correctLevel: QRCode.CorrectLevel.M
