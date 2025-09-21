@@ -4,6 +4,14 @@ if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
     Telegram.WebApp.expand();
     Telegram.WebApp.setHeaderColor('#000');
     Telegram.WebApp.setBackgroundColor('#000');
+    
+    // Принудительный сброс отступов
+    setTimeout(() => {
+        document.body.style.margin = '0';
+        document.body.style.padding = '0';
+        document.documentElement.style.margin = '0';
+        document.documentElement.style.padding = '0';
+    }, 100);
 } else {
     console.warn('Telegram WebApp не доступен');
 }
