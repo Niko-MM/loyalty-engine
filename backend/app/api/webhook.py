@@ -5,7 +5,7 @@ from app.repository.user import update_user_points, get_user_by_telegram_id
 router = APIRouter()
 
 
-@router.post("/transaction")
+@router.post("/transaction_webhook")
 async def handle_transaction_webhook(data: dict):
     try:
         user_id = data["user_id"]
