@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from app.repository.user import get_user_by_telegram_id, create_user
 from app.schemas.user import UserIn, UserProfileRequest
 import hashlib
@@ -32,12 +32,16 @@ async def init_user(user_: UserIn):
 
 
 @router.get("/profile")
-async def user_info(request: UserProfileRequest):
-    user = await get_user_by_telegram_id(request.telegram_id)
+async def user_info(telegram_id: int = Query(...)):
+    user = await get_user_by_telegram_id(telegram_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    return {"nick_name": user.nick_name, "points": user.points, "qr_code": user.qr_code}
+    return {
+        "nick_name": user.nick_name,
+        "points": user.points,
+        "qr_code": user.qr_code
+    }
 
 
 def generate_qr_code(telegram_id):
