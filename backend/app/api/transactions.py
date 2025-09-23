@@ -8,7 +8,7 @@ from app.schemas.transaction import TransactionCreate
 router = APIRouter()
 
 
-@router.post("/")
+@router.post("/create_transaction")
 async def create_transaction_endpoint(transaction_data: TransactionCreate):
     try:
         user = await get_user_by_telegram_id(transaction_data.user_id)
