@@ -31,7 +31,7 @@ async def init_user(user_: UserIn):
         raise HTTPException(status_code=500, detail=f"Registration failed: {str(e)}")
 
 
-@router.post("/profile")
+@router.get("/profile")
 async def user_info(request: UserProfileRequest):
     user = await get_user_by_telegram_id(request.telegram_id)
     if not user:
