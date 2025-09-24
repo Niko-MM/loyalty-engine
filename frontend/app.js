@@ -87,8 +87,8 @@ function generateQRCode(data) {
         
         new QRCode(qrCodeEl, {
             text: String(data),
-            width: 220,
-            height: 220,
+            width: 280,
+            height: 280,
             colorDark: '#ffffff',
             colorLight: 'transparent',
             correctLevel: QRCode.CorrectLevel.M
@@ -427,17 +427,30 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    // Обработчик кнопки лояльности
-    const loyaltyBtn = document.getElementById('loyalty-btn');
-    if (loyaltyBtn) {
-        loyaltyBtn.onclick = function() {
+    // Обработчик кнопки установки PWA
+    const installBtn = document.getElementById('install-btn');
+    if (installBtn) {
+        installBtn.onclick = function() {
             createHapticFeedback();
-            const loyaltyText = 'Система лояльности:\n\n• За каждую покупку вы получаете баллы\n• 1 балл = 1 рубль скидки\n• Баллы накапливаются и не сгорают\n• Используйте QR-код для оплаты';
+            const installText = `📱 Как добавить на рабочий стол:
+
+🔹 Через Telegram:
+1. Нажмите кнопку "Поделиться" (квадрат со стрелкой)
+2. Выберите "На экран «Домой»"
+3. Приложение появится на главном экране
+
+🔹 Через Safari (рекомендуется):
+1. Нажмите кнопку "Поделиться" в Telegram
+2. Выберите "Открыть в Safari"
+3. В Safari нажмите "Поделиться"
+4. "На экран «Домой»"
+
+✅ После установки приложение будет работать как обычное!`;
             
             if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-                Telegram.WebApp.showAlert(loyaltyText);
+                Telegram.WebApp.showAlert(installText);
             } else {
-                alert(loyaltyText);
+                alert(installText);
             }
         };
     }

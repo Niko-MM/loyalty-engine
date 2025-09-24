@@ -1,13 +1,13 @@
 // Service Worker для PWA
 const CACHE_NAME = 'loyalty-app-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/app.js',
-  '/manifest.json',
-  '/public/images/logo/logo.png',
-  '/public/pwa/icons/icon-192.png',
-  '/public/pwa/icons/icon-512.png'
+  './',
+  './index.html',
+  './app.js',
+  './manifest.json',
+  './public/images/logo/logo.png',
+  './public/pwa/icons/icon-192.png',
+  './public/pwa/icons/icon-512.png'
 ];
 
 // Установка Service Worker
