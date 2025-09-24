@@ -453,7 +453,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!logo) return;
 
         // Обработчик касания экрана
-        document.addEventListener('touchstart', function() {
+        document.addEventListener('touchstart', function(e) {
+            // Проверяем, что касание не по меню или кнопкам
+            if (e.target.closest('.bottom-menu') || 
+                e.target.closest('.menu-btn') || 
+                e.target.closest('.action-btn') ||
+                e.target.closest('.user-info')) {
+                return; // Не запускаем анимацию
+            }
+            
             logo.classList.add('vibrate');
             createHapticFeedback();
             
@@ -465,8 +473,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Обработчик клика мыши (для тестирования)
         document.addEventListener('click', function(e) {
-            // Вибрация только при клике на пустую область
-            if (e.target === document.body || e.target === document.documentElement) {
+            // Проверяем, что клик не по меню или кнопкам
+            if (e.target.closest('.bottom-menu') || 
+                e.target.closest('.menu-btn') || 
+                e.target.closest('.action-btn') ||
+                e.target.closest('.user-info')) {
+                return; // Не запускаем анимацию
+            }
+            
+            // Вибрация при клике на пустую область или QR-код
+            if (e.target === document.body || 
+                e.target === document.documentElement ||
+                e.target.closest('.qr-code')) {
                 logo.classList.add('vibrate');
                 createHapticFeedback();
                 
