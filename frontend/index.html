@@ -75,8 +75,8 @@
         /* Большая шапка с логотипом */
         .header-section {
             width: 100%;
-            background: var(--gradient-primary);
-            padding: 40px 20px 30px 20px;
+            background: var(--primary-color);
+            padding: 60px 20px 50px 20px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -90,28 +90,29 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-            opacity: 0.3;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.03)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.03)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.02)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.02)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.02)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.5;
         }
 
         .logo {
-            width: 120px;
-            height: 120px;
-            border-radius: 20px;
+            width: 180px;
+            height: 180px;
+            border-radius: 24px;
             object-fit: contain;
-            box-shadow: none;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
             backdrop-filter: none;
-            border: none;
-            background: transparent;
+            border: 2px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.95);
             position: relative;
             z-index: 2;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            filter: brightness(1.1) contrast(1.1);
+            filter: brightness(1) contrast(1);
         }
 
         .logo:hover {
             transform: scale(1.05);
-            filter: brightness(1.2) contrast(1.2);
+            filter: brightness(1.05) contrast(1.05);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
         }
 
         /* Секция с информацией о пользователе */
@@ -274,12 +275,12 @@
                 transform: scale(1);
             }
             50% {
-                transform: scale(1.15);
-                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                transform: scale(1.25);
+                box-shadow: 0 25px 80px rgba(0,0,0,0.4);
             }
             100% {
-                transform: scale(1.05);
-                box-shadow: 0 15px 50px rgba(0,0,0,0.25);
+                transform: scale(1.08);
+                box-shadow: 0 18px 60px rgba(0,0,0,0.3);
             }
         }
 
@@ -294,8 +295,8 @@
                 box-shadow: 0 8px 32px rgba(0,0,0,0.15);
             }
             50% {
-                transform: scale(1.02);
-                box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+                transform: scale(1.08);
+                box-shadow: 0 16px 50px rgba(0,0,0,0.25);
             }
         }
 
@@ -336,12 +337,12 @@
                 box-shadow: 0 8px 32px rgba(0,0,0,0.3);
             }
             50% {
-                transform: scale(1.08);
-                box-shadow: 0 16px 48px rgba(102, 126, 234, 0.2);
+                transform: scale(1.15);
+                box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
             }
             100% {
-                transform: scale(1.05);
-                box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+                transform: scale(1.08);
+                box-shadow: 0 15px 50px rgba(0,0,0,0.3);
             }
         }
 
@@ -574,14 +575,14 @@
             }
             
             .header-section {
-                padding: 30px 16px 25px 16px;
+                padding: 50px 16px 40px 16px;
                 margin-bottom: 15px;
             }
             
             .logo {
-                width: 100px;
-                height: 100px;
-                filter: brightness(1.1) contrast(1.1);
+                width: 150px;
+                height: 150px;
+                filter: brightness(1) contrast(1);
             }
             
             .user-info {
@@ -694,14 +695,14 @@
             }
             
             .header-section {
-                padding: 25px 12px 20px 12px;
+                padding: 40px 12px 30px 12px;
                 margin-bottom: 12px;
             }
             
             .logo {
-                width: 90px;
-                height: 90px;
-                filter: brightness(1.1) contrast(1.1);
+                width: 130px;
+                height: 130px;
+                filter: brightness(1) contrast(1);
             }
             
             .user-info {
