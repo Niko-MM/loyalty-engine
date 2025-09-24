@@ -457,10 +457,10 @@ document.addEventListener('DOMContentLoaded', function() {
             logo.classList.add('vibrate');
             createHapticFeedback();
             
-            // Убираем класс после анимации
+            // Убираем класс после анимации (0.8 секунды)
             setTimeout(() => {
                 logo.classList.remove('vibrate');
-            }, 300);
+            }, 800);
         });
 
         // Обработчик клика мыши (для тестирования)
@@ -472,7 +472,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 setTimeout(() => {
                     logo.classList.remove('vibrate');
-                }, 300);
+                }, 800);
             }
         });
     }

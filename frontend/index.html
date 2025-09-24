@@ -223,22 +223,93 @@
             filter: brightness(1.1) contrast(1.3);
         }
 
-        /* Анимация вибрации логотипа при касании */
+        /* Анимация волны логотипа при касании */
         .logo.vibrate {
-            animation: logoVibrate 0.3s ease-in-out;
+            animation: logoWave 0.8s ease-in-out;
         }
 
-        @keyframes logoVibrate {
-            0%, 100% { transform: translateX(0) scale(1); }
-            10% { transform: translateX(-8px) scale(1.05); }
-            20% { transform: translateX(8px) scale(1.05); }
-            30% { transform: translateX(-6px) scale(1.03); }
-            40% { transform: translateX(6px) scale(1.03); }
-            50% { transform: translateX(-4px) scale(1.02); }
-            60% { transform: translateX(4px) scale(1.02); }
-            70% { transform: translateX(-2px) scale(1.01); }
-            80% { transform: translateX(2px) scale(1.01); }
-            90% { transform: translateX(0) scale(1); }
+        @keyframes logoWave {
+            0% { 
+                transform: translateY(0) scale(1) rotate(0deg); 
+                filter: brightness(1) contrast(1.2);
+            }
+            10% { 
+                transform: translateY(-12px) scale(1.08) rotate(-2deg); 
+                filter: brightness(1.1) contrast(1.3);
+            }
+            20% { 
+                transform: translateY(-8px) scale(1.12) rotate(2deg); 
+                filter: brightness(1.15) contrast(1.4);
+            }
+            30% { 
+                transform: translateY(-15px) scale(1.15) rotate(-1deg); 
+                filter: brightness(1.2) contrast(1.5);
+            }
+            40% { 
+                transform: translateY(-6px) scale(1.18) rotate(1deg); 
+                filter: brightness(1.25) contrast(1.6);
+            }
+            50% { 
+                transform: translateY(-18px) scale(1.2) rotate(-0.5deg); 
+                filter: brightness(1.3) contrast(1.7);
+            }
+            60% { 
+                transform: translateY(-4px) scale(1.15) rotate(0.5deg); 
+                filter: brightness(1.25) contrast(1.6);
+            }
+            70% { 
+                transform: translateY(-10px) scale(1.1) rotate(-0.3deg); 
+                filter: brightness(1.2) contrast(1.5);
+            }
+            80% { 
+                transform: translateY(-2px) scale(1.05) rotate(0.3deg); 
+                filter: brightness(1.15) contrast(1.4);
+            }
+            90% { 
+                transform: translateY(-5px) scale(1.02) rotate(-0.1deg); 
+                filter: brightness(1.1) contrast(1.3);
+            }
+            100% { 
+                transform: translateY(0) scale(1) rotate(0deg); 
+                filter: brightness(1) contrast(1.2);
+            }
+        }
+
+        /* Зеленый фон при анимации логотипа */
+        .logo.vibrate::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 50%, transparent 100%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: greenGlow 0.8s ease-in-out;
+        }
+
+        @keyframes greenGlow {
+            0% { 
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            20% { 
+                opacity: 0.3;
+                transform: scale(1.2);
+            }
+            50% { 
+                opacity: 0.4;
+                transform: scale(1.5);
+            }
+            80% { 
+                opacity: 0.2;
+                transform: scale(1.8);
+            }
+            100% { 
+                opacity: 0;
+                transform: scale(2);
+            }
         }
 
         /* Секция с информацией о пользователе */
