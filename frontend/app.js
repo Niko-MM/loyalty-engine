@@ -446,6 +446,39 @@ document.addEventListener('DOMContentLoaded', function() {
     qrCodeEl.addEventListener('click', function() {
         createHapticFeedback();
     });
+
+    // Анимация вибрации логотипа при касании экрана
+    function addLogoVibration() {
+        const logo = document.getElementById('logo');
+        if (!logo) return;
+
+        // Обработчик касания экрана
+        document.addEventListener('touchstart', function() {
+            logo.classList.add('vibrate');
+            createHapticFeedback();
+            
+            // Убираем класс после анимации
+            setTimeout(() => {
+                logo.classList.remove('vibrate');
+            }, 300);
+        });
+
+        // Обработчик клика мыши (для тестирования)
+        document.addEventListener('click', function(e) {
+            // Вибрация только при клике на пустую область
+            if (e.target === document.body || e.target === document.documentElement) {
+                logo.classList.add('vibrate');
+                createHapticFeedback();
+                
+                setTimeout(() => {
+                    logo.classList.remove('vibrate');
+                }, 300);
+            }
+        });
+    }
+
+    // Запускаем анимацию вибрации
+    addLogoVibration();
     
     // Обновление имени пользователя с задержкой
     setTimeout(updateUsername, 1000);
