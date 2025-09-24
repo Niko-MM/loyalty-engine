@@ -4,13 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Loyalty App</title>
+    <meta name="description" content="Ваша персональная карта лояльности">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Моя Карта">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="public/pwa/icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="public/pwa/icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="public/pwa/icons/icon-512.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        // Регистрация Service Worker для PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(function(registrationError) {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
     <style>
         * {
             margin: 0;
@@ -95,24 +116,23 @@
         }
 
         .logo {
-            width: 180px;
-            height: 180px;
-            border-radius: 24px;
+            width: 360px;
+            height: 360px;
+            border-radius: 0;
             object-fit: contain;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            box-shadow: none;
             backdrop-filter: none;
-            border: 2px solid rgba(255,255,255,0.1);
-            background: rgba(255,255,255,0.95);
+            border: none;
+            background: transparent;
             position: relative;
             z-index: 2;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            filter: brightness(1) contrast(1);
+            filter: brightness(1) contrast(1.2);
         }
 
         .logo:hover {
             transform: scale(1.05);
-            filter: brightness(1.05) contrast(1.05);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+            filter: brightness(1.1) contrast(1.3);
         }
 
         /* Секция с информацией о пользователе */
@@ -179,81 +199,50 @@
         }
 
         .qr-container {
-            background: rgba(255,255,255,0.05);
-            padding: 25px;
-            border-radius: 24px;
-            box-shadow: var(--shadow-soft);
-            border: 2px solid transparent;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            border: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(20px);
+            backdrop-filter: none;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
             background-clip: padding-box;
         }
 
-        /* Переливающаяся рамка */
+        /* Брутальная рамка QR-кода */
         .qr-container::before {
             content: '';
             position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: var(--gradient-qr);
-            border-radius: 24px;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: #ffffff;
+            border-radius: 0;
             z-index: -1;
-            animation: gradientShift 3s ease-in-out infinite;
-        }
-
-        .qr-container::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            animation: shimmer 2.5s infinite;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { 
-                background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
-            }
-            25% { 
-                background: linear-gradient(45deg, #f5576c, #4facfe, #00f2fe, #667eea, #764ba2, #f093fb);
-            }
-            50% { 
-                background: linear-gradient(45deg, #4facfe, #00f2fe, #667eea, #764ba2, #f093fb, #f5576c);
-            }
-            75% { 
-                background: linear-gradient(45deg, #00f2fe, #667eea, #764ba2, #f093fb, #f5576c, #4facfe);
-            }
-        }
-
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
+            opacity: 0.1;
         }
 
         .qr-code {
             width: 220px;
             height: 220px;
-            background: #fff;
-            border-radius: 16px;
+            background: transparent;
+            border-radius: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 16px;
-            color: #333;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            color: #ffffff;
+            box-shadow: none;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(0,0,0,0.05);
+            overflow: visible;
+            border: 2px solid #ffffff;
         }
 
         .qr-code:hover {
@@ -580,9 +569,9 @@
             }
             
             .logo {
-                width: 150px;
-                height: 150px;
-                filter: brightness(1) contrast(1);
+                width: 300px;
+                height: 300px;
+                filter: brightness(1) contrast(1.2);
             }
             
             .user-info {
@@ -700,9 +689,9 @@
             }
             
             .logo {
-                width: 130px;
-                height: 130px;
-                filter: brightness(1) contrast(1);
+                width: 260px;
+                height: 260px;
+                filter: brightness(1) contrast(1.2);
             }
             
             .user-info {

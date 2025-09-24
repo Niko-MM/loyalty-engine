@@ -89,8 +89,8 @@ function generateQRCode(data) {
             text: String(data),
             width: 220,
             height: 220,
-            colorDark: '#000000',
-            colorLight: '#ffffff',
+            colorDark: '#ffffff',
+            colorLight: 'transparent',
             correctLevel: QRCode.CorrectLevel.M
         });
     } catch (e) {

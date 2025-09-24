@@ -7,6 +7,9 @@
   "background_color": "#000000",
   "theme_color": "#000000",
   "orientation": "portrait",
+  "scope": "/",
+  "lang": "ru",
+  "categories": ["business", "lifestyle"],
   "icons": [
     {
       "src": "public/pwa/icons/icon-192.png",
@@ -31,6 +34,14 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "public/pwa/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow"
     }
   ]
 }
