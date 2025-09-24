@@ -76,25 +76,25 @@ function generateQRCode(data) {
     qrCodeEl.innerHTML = '';
     try {
         if (!data || data === 'error') {
-            qrCodeEl.innerHTML = '<div style="padding:12px;color:#333;text-align:center;font-size:14px;">QR недоступен</div>';
+            qrCodeEl.innerHTML = '<div style="padding:20px;color:#333;text-align:center;font-size:16px;font-weight:500;">QR недоступен</div>';
             return;
         }
         
         if (data === 'guest') {
-            qrCodeEl.innerHTML = '<div style="padding:12px;color:#333;text-align:center;font-size:14px;">Войдите в Telegram</div>';
+            qrCodeEl.innerHTML = '<div style="padding:20px;color:#333;text-align:center;font-size:16px;font-weight:500;">Войдите в Telegram</div>';
             return;
         }
         
         new QRCode(qrCodeEl, {
             text: String(data),
-            width: 180,
-            height: 180,
+            width: 220,
+            height: 220,
             colorDark: '#000000',
             colorLight: '#ffffff',
             correctLevel: QRCode.CorrectLevel.M
         });
     } catch (e) {
-        qrCodeEl.innerHTML = '<div style="padding:12px;color:#333;text-align:center;font-size:14px;">QR недоступен</div>';
+        qrCodeEl.innerHTML = '<div style="padding:20px;color:#333;text-align:center;font-size:16px;font-weight:500;">QR недоступен</div>';
         console.error('QR render error', e);
     }
 }
@@ -378,8 +378,14 @@ document.addEventListener('DOMContentLoaded', function() {
     })();
     
     // Анимация появления элементов
-    const elements = [logoEl, usernameEl, pointsEl, qrCodeEl];
-    elements.forEach((el, i) => animateElement(el, i * 150));
+    const headerSection = document.querySelector('.header-section');
+    const userInfo = document.querySelector('.user-info');
+    const qrSection = document.querySelector('.qr-section');
+    
+    const elements = [headerSection, userInfo, qrSection];
+    elements.forEach((el, i) => {
+        if (el) animateElement(el, i * 200);
+    });
     
     // Обработчик кнопки "О кафе"
     if (cafeBtnEl) {
@@ -436,14 +442,61 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
-    // Анимация при клике на QR-код
+    // Красивая анимация при клике на QR-код
     qrCodeEl.addEventListener('click', function() {
         createHapticFeedback();
-        this.style.transform = 'scale(0.95)';
-        setTimeout(() => { 
-            this.style.transform = 'scale(1)'; 
-        }, 150);
+        
+        // Убираем предыдущие анимации
+        this.classList.remove('zoom-animation', 'pulse');
+        const qrContainer = this.closest('.qr-container');
+        const mainContent = document.getElementById('mainContent');
+        
+        // Добавляем анимацию увеличения QR-кода
+        this.classList.add('zoom-animation');
+        
+        // Добавляем эффект волны для контейнера
+        if (qrContainer) {
+            qrContainer.classList.add('wave-effect');
+        }
+        
+        // Добавляем анимацию для всего экрана
+        if (mainContent) {
+            mainContent.classList.add('screen-tap');
+        }
+        
+        // Убираем анимации после завершения
+        setTimeout(() => {
+            this.classList.remove('zoom-animation');
+            if (qrContainer) {
+                qrContainer.classList.remove('wave-effect');
+            }
+            if (mainContent) {
+                mainContent.classList.remove('screen-tap');
+            }
+        }, 800);
     });
+
+    // Добавляем пульсацию для привлечения внимания (только на мобильных)
+    function addQrPulse() {
+        if (window.innerWidth <= 768) {
+            qrCodeEl.classList.add('pulse');
+        }
+    }
+
+    // Убираем пульсацию при взаимодействии и добавляем touch-анимацию
+    qrCodeEl.addEventListener('touchstart', function() {
+        this.classList.remove('pulse');
+        // Добавляем легкую анимацию при касании
+        this.style.transform = 'scale(0.98)';
+    });
+
+    qrCodeEl.addEventListener('touchend', function() {
+        // Возвращаем к нормальному размеру
+        this.style.transform = 'scale(1)';
+    });
+
+    // Запускаем пульсацию через 3 секунды после загрузки
+    setTimeout(addQrPulse, 3000);
     
     // Обновление имени пользователя с задержкой
     setTimeout(updateUsername, 1000);

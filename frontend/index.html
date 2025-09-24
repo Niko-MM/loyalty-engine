@@ -6,6 +6,9 @@
     <title>Loyalty App</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="public/pwa/icons/icon-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
@@ -17,19 +20,27 @@
 
         :root {
             --vh: 1vh;
+            --primary-color: #000000;
+            --accent-color: #ffffff;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-text: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+            --gradient-qr: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-glow: 0 0 20px rgba(102, 126, 234, 0.3);
         }
         
         html, body {
             height: 100%;
             height: calc(var(--vh, 1vh) * 100);
-            background: #000;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            color: #fff;
+            background: var(--primary-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            color: var(--accent-color);
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
+            font-feature-settings: 'kern' 1;
         }
 
         .container {
@@ -37,12 +48,12 @@
             max-width: 480px;
             min-height: 100vh;
             min-height: calc(var(--vh, 1vh) * 100);
-            margin: 0;
-            padding: 0 0 120px 0;
+            margin: 0 auto;
+            padding: 0 0 100px 0;
             display: flex;
             flex-direction: column;
-            align-items: center;
             position: relative;
+            background: var(--primary-color);
         }
 
         .main-content {
@@ -52,7 +63,7 @@
             align-items: center;
             justify-content: flex-start;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            padding-top: 45px;
+            padding-top: 0;
         }
 
         .main-content.overlay-active {
@@ -61,74 +72,164 @@
             filter: blur(2px);
         }
 
+        /* Большая шапка с логотипом */
+        .header-section {
+            width: 100%;
+            background: var(--gradient-primary);
+            padding: 40px 20px 30px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
         .logo {
-            width: 60px;
-            height: 60px;
-            position: fixed;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 20;
-            border-radius: 8px;
+            width: 120px;
+            height: 120px;
+            border-radius: 20px;
             object-fit: contain;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-            background: rgba(0,0,0,0.8);
+            box-shadow: none;
+            backdrop-filter: none;
+            border: none;
+            background: transparent;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: brightness(1.1) contrast(1.1);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2) contrast(1.2);
+        }
+
+        /* Секция с информацией о пользователе */
+        .user-info {
+            width: 100%;
+            padding: 0 20px;
+            text-align: center;
+            margin-bottom: 30px;
         }
 
         .username {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             font-weight: 600;
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+            letter-spacing: -0.3px;
             text-align: center;
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: var(--gradient-text);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 2;
         }
 
         .points {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 12px;
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 20px;
             text-align: center;
-            letter-spacing: -1px;
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
+            letter-spacing: -1.2px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: var(--gradient-text);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+            line-height: 1.1;
+        }
+
+        .points::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            opacity: 0.8;
+        }
+
+        /* QR-код секция */
+        .qr-section {
+            width: 100%;
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
         }
 
         .qr-container {
-            background: rgba(255,255,255,0.03);
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 12px;
+            background: rgba(255,255,255,0.05);
+            padding: 25px;
+            border-radius: 24px;
+            box-shadow: var(--shadow-soft);
+            border: 2px solid transparent;
             display: flex;
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(20px);
             position: relative;
             overflow: hidden;
+            background-clip: padding-box;
         }
 
+        /* Переливающаяся рамка */
         .qr-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--gradient-qr);
+            border-radius: 24px;
+            z-index: -1;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+
+        .qr-container::after {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-            animation: shimmer 3s infinite;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 2.5s infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { 
+                background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+            }
+            25% { 
+                background: linear-gradient(45deg, #f5576c, #4facfe, #00f2fe, #667eea, #764ba2, #f093fb);
+            }
+            50% { 
+                background: linear-gradient(45deg, #4facfe, #00f2fe, #667eea, #764ba2, #f093fb, #f5576c);
+            }
+            75% { 
+                background: linear-gradient(45deg, #00f2fe, #667eea, #764ba2, #f093fb, #f5576c, #4facfe);
+            }
         }
 
         @keyframes shimmer {
@@ -137,25 +238,111 @@
         }
 
         .qr-code {
-            width: 180px;
-            height: 180px;
+            width: 220px;
+            height: 220px;
             background: #fff;
-            border-radius: 12px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 16px;
             color: #333;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .qr-code:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            transform: scale(1.03);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+        }
+
+        .qr-code:active {
+            transform: scale(0.98);
+        }
+
+        /* Анимация увеличения QR-кода при нажатии */
+        .qr-code.zoom-animation {
+            animation: qrZoom 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes qrZoom {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.15);
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            }
+            100% {
+                transform: scale(1.05);
+                box-shadow: 0 15px 50px rgba(0,0,0,0.25);
+            }
+        }
+
+        /* Эффект пульсации для привлечения внимания */
+        .qr-code.pulse {
+            animation: qrPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes qrPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            }
+            50% {
+                transform: scale(1.02);
+                box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+            }
+        }
+
+        /* Анимация для всего экрана при нажатии */
+        .main-content.screen-tap {
+            animation: screenTap 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes screenTap {
+            0% {
+                transform: scale(1);
+            }
+            20% {
+                transform: scale(0.98);
+            }
+            40% {
+                transform: scale(1.02);
+            }
+            60% {
+                transform: scale(0.99);
+            }
+            80% {
+                transform: scale(1.01);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Эффект волны при нажатии на QR */
+        .qr-container.wave-effect {
+            animation: waveEffect 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes waveEffect {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            }
+            50% {
+                transform: scale(1.08);
+                box-shadow: 0 16px 48px rgba(102, 126, 234, 0.2);
+            }
+            100% {
+                transform: scale(1.05);
+                box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+            }
         }
 
         .cafe-overlay {
@@ -236,33 +423,37 @@
             transform: scale(1.1);
         }
 
+        /* Нижнее меню */
         .bottom-menu {
             width: 100%;
+            max-width: 480px;
             display: flex;
             justify-content: space-between;
-            gap: 8px;
+            gap: 12px;
             position: fixed;
-            left: 0;
+            left: 50%;
+            transform: translateX(-50%);
             bottom: 0;
             background: rgba(0,0,0,0.95);
-            padding: 16px 12px 32px 12px;
+            padding: 20px 16px 32px 16px;
             z-index: 10;
             backdrop-filter: blur(30px);
             border-top: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px 24px 0 0;
         }
 
         .menu-btn {
             flex: 1 1 0;
             background: rgba(255,255,255,0.08);
             color: #fff;
-            font-size: 0.85rem;
-            font-weight: 500;
+            font-size: 0.9rem;
+            font-weight: 600;
             border: none;
-            border-radius: 12px;
-            padding: 16px 8px;
+            border-radius: 16px;
+            padding: 18px 12px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             outline: none;
-            letter-spacing: -0.3px;
+            letter-spacing: -0.2px;
             text-align: center;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
@@ -272,6 +463,10 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.1);
             touch-action: manipulation;
+            min-height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .menu-btn::before {
@@ -290,28 +485,28 @@
         }
 
         .menu-btn:active {
-            transform: scale(0.96);
+            transform: scale(0.95);
             background: rgba(255,255,255,0.12);
         }
 
         .menu-btn.active {
             background: rgba(255,255,255,0.15);
             border-color: rgba(255,255,255,0.3);
-            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+            box-shadow: var(--shadow-glow);
         }
 
         .action-btn {
             flex: 1 1 0;
             background: rgba(255,255,255,0.08);
             color: #fff;
-            font-size: 0.85rem;
-            font-weight: 500;
+            font-size: 0.9rem;
+            font-weight: 600;
             border: none;
-            border-radius: 12px;
-            padding: 16px 8px;
+            border-radius: 16px;
+            padding: 18px 12px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             outline: none;
-            letter-spacing: -0.3px;
+            letter-spacing: -0.2px;
             text-align: center;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
@@ -321,10 +516,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.1);
             touch-action: manipulation;
+            min-height: 56px;
         }
 
         .action-btn::before {
@@ -343,24 +539,26 @@
         }
 
         .action-btn:active {
-            transform: scale(0.96);
+            transform: scale(0.95);
             background: rgba(255,255,255,0.12);
         }
 
         .action-btn.active {
             background: rgba(255,255,255,0.15);
             border-color: rgba(255,255,255,0.3);
-            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+            box-shadow: var(--shadow-glow);
         }
 
         .action-btn .icon {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             margin-bottom: 2px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
         }
 
         .action-btn span {
-            font-size: 0.75rem;
-            font-weight: 400;
+            font-size: 0.8rem;
+            font-weight: 500;
+            line-height: 1.2;
         }
 
         /* Сброс отступов для Telegram WebApp */
@@ -372,46 +570,66 @@
         /* Мобильная оптимизация для Telegram Mini App */
         @media (max-width: 480px) {
             .container {
-                padding: 0 0 100px 0;
+                padding: 0 0 90px 0;
             }
             
-            .main-content {
-                padding-top: 60px;
+            .header-section {
+                padding: 30px 16px 25px 16px;
+                margin-bottom: 15px;
             }
             
             .logo {
-                width: 50px;
-                height: 50px;
-                top: 15px;
+                width: 100px;
+                height: 100px;
+                filter: brightness(1.1) contrast(1.1);
+            }
+            
+            .user-info {
+                padding: 0 16px;
+                margin-bottom: 25px;
             }
             
             .username {
-                font-size: 1.1rem;
-                margin-bottom: 6px;
+                font-size: 1.2rem;
+                margin-bottom: 10px;
             }
             
             .points {
-                font-size: 1.8rem;
-                margin-bottom: 10px;
+                font-size: 2.4rem;
+                margin-bottom: 15px;
+            }
+            
+            .qr-section {
+                padding: 0 16px;
+                margin-bottom: 15px;
             }
             
             .qr-container {
-                padding: 15px;
-                margin-bottom: 10px;
+                padding: 20px;
             }
             
             .qr-code {
-                width: 160px;
-                height: 160px;
+                width: 200px;
+                height: 200px;
             }
             
             .bottom-menu {
-                padding: 12px 8px 24px 8px;
+                padding: 16px 12px 28px 12px;
+                gap: 10px;
             }
             
             .menu-btn, .action-btn {
-                font-size: 0.8rem;
-                padding: 14px 6px;
+                font-size: 0.85rem;
+                padding: 16px 10px;
+                min-height: 52px;
+            }
+            
+            .action-btn .icon {
+                font-size: 1.2rem;
+            }
+            
+            .action-btn span {
+                font-size: 0.75rem;
             }
             
             .cafe-content {
@@ -472,43 +690,66 @@
         /* Дополнительная оптимизация для очень маленьких экранов */
         @media (max-width: 360px) {
             .container {
-                padding: 0 0 90px 0;
+                padding: 0 0 85px 0;
             }
             
-            .main-content {
-                padding-top: 55px;
+            .header-section {
+                padding: 25px 12px 20px 12px;
+                margin-bottom: 12px;
             }
             
             .logo {
-                width: 40px;
-                height: 40px;
-                top: 12px;
+                width: 90px;
+                height: 90px;
+                filter: brightness(1.1) contrast(1.1);
+            }
+            
+            .user-info {
+                padding: 0 12px;
+                margin-bottom: 20px;
             }
             
             .username {
-                font-size: 1rem;
+                font-size: 1.1rem;
+                margin-bottom: 8px;
             }
             
             .points {
-                font-size: 1.6rem;
+                font-size: 2.2rem;
+                margin-bottom: 12px;
+            }
+            
+            .qr-section {
+                padding: 0 12px;
+                margin-bottom: 12px;
             }
             
             .qr-container {
-                padding: 10px;
+                padding: 18px;
             }
             
             .qr-code {
-                width: 120px;
-                height: 120px;
+                width: 180px;
+                height: 180px;
             }
             
             .bottom-menu {
-                padding: 10px 6px 20px 6px;
+                padding: 14px 10px 24px 10px;
+                gap: 8px;
             }
             
             .menu-btn, .action-btn {
-                font-size: 0.75rem;
-                padding: 12px 4px;
+                font-size: 0.8rem;
+                padding: 14px 8px;
+                min-height: 48px;
+            }
+            
+            .action-btn .icon {
+                font-size: 1.1rem;
+            }
+            
+            .action-btn span {
+                font-size: 0.7rem;
             }
         }
         
@@ -538,11 +779,22 @@
 <body class="telegram-webapp">
     <div class="container">
         <div class="main-content" id="mainContent">
-            <img src="public/images/logo/logo.png" alt="Логотип" class="logo" id="logo">
-            <div class="username" id="username">@username</div>
-            <div class="points" id="points">0 баллов</div>
-            <div class="qr-container">
-                <div class="qr-code" id="qr-code">QR</div>
+            <!-- Большая шапка с логотипом -->
+            <div class="header-section">
+                <img src="public/images/logo/logo.png" alt="Логотип" class="logo" id="logo">
+            </div>
+            
+            <!-- Информация о пользователе -->
+            <div class="user-info">
+                <div class="username" id="username">@username</div>
+                <div class="points" id="points">0 баллов</div>
+            </div>
+            
+            <!-- QR-код секция -->
+            <div class="qr-section">
+                <div class="qr-container">
+                    <div class="qr-code" id="qr-code">QR</div>
+                </div>
             </div>
         </div>
     </div>
