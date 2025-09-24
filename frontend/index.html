@@ -8,8 +8,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Моя Карта">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="public/pwa/icons/icon-192.png">
-    <link rel="icon" href="public/pwa/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="/public/pwa/icons/icon-192.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/public/pwa/icons/icon-192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="/public/pwa/icons/icon-512.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/public/pwa/icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/public/pwa/icons/icon-512.png">
+    <link rel="shortcut icon" href="/public/pwa/icons/icon-192.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -130,6 +134,7 @@
             padding: 0 20px;
             text-align: center;
             margin-bottom: 8px;
+            margin-top: -15%;
         }
 
         .username {
@@ -173,6 +178,7 @@
             display: flex;
             justify-content: center;
             margin-bottom: 20px;
+            margin-top: -15%;
         }
 
         .qr-container {
@@ -209,94 +215,14 @@
         }
 
         .qr-code:hover {
-            transform: scale(1.03);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+            transform: none;
+            box-shadow: none;
         }
 
         .qr-code:active {
-            transform: scale(0.98);
+            transform: none;
         }
 
-        /* Анимация увеличения QR-кода при нажатии */
-        .qr-code.zoom-animation {
-            animation: qrZoom 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes qrZoom {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.25);
-                box-shadow: 0 25px 80px rgba(0,0,0,0.4);
-            }
-            100% {
-                transform: scale(1.08);
-                box-shadow: 0 18px 60px rgba(0,0,0,0.3);
-            }
-        }
-
-        /* Эффект пульсации для привлечения внимания */
-        .qr-code.pulse {
-            animation: qrPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes qrPulse {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-            }
-            50% {
-                transform: scale(1.08);
-                box-shadow: 0 16px 50px rgba(0,0,0,0.25);
-            }
-        }
-
-        /* Анимация для всего экрана при нажатии */
-        .main-content.screen-tap {
-            animation: screenTap 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes screenTap {
-            0% {
-                transform: scale(1);
-            }
-            20% {
-                transform: scale(0.98);
-            }
-            40% {
-                transform: scale(1.02);
-            }
-            60% {
-                transform: scale(0.99);
-            }
-            80% {
-                transform: scale(1.01);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        /* Эффект волны при нажатии на QR */
-        .qr-container.wave-effect {
-            animation: waveEffect 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes waveEffect {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-            }
-            50% {
-                transform: scale(1.15);
-                box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
-            }
-            100% {
-                transform: scale(1.08);
-                box-shadow: 0 15px 50px rgba(0,0,0,0.3);
-            }
-        }
 
         .cafe-overlay {
             position: fixed;
@@ -540,6 +466,7 @@
             .user-info {
                 padding: 0 16px;
                 margin-bottom: 6px;
+                margin-top: -15%;
             }
             
             .username {
@@ -555,6 +482,7 @@
             .qr-section {
                 padding: 0 16px;
                 margin-bottom: 15px;
+                margin-top: -15%;
             }
             
             .qr-container {
@@ -660,6 +588,7 @@
             .user-info {
                 padding: 0 12px;
                 margin-bottom: 5px;
+                margin-top: -15%;
             }
             
             .username {
@@ -675,6 +604,7 @@
             .qr-section {
                 padding: 0 12px;
                 margin-bottom: 12px;
+                margin-top: -15%;
             }
             
             .qr-container {

@@ -442,61 +442,10 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
-    // Красивая анимация при клике на QR-код
+    // Простой клик на QR-код без анимаций
     qrCodeEl.addEventListener('click', function() {
         createHapticFeedback();
-        
-        // Убираем предыдущие анимации
-        this.classList.remove('zoom-animation', 'pulse');
-        const qrContainer = this.closest('.qr-container');
-        const mainContent = document.getElementById('mainContent');
-        
-        // Добавляем анимацию увеличения QR-кода
-        this.classList.add('zoom-animation');
-        
-        // Добавляем эффект волны для контейнера
-        if (qrContainer) {
-            qrContainer.classList.add('wave-effect');
-        }
-        
-        // Добавляем анимацию для всего экрана
-        if (mainContent) {
-            mainContent.classList.add('screen-tap');
-        }
-        
-        // Убираем анимации после завершения
-        setTimeout(() => {
-            this.classList.remove('zoom-animation');
-            if (qrContainer) {
-                qrContainer.classList.remove('wave-effect');
-            }
-            if (mainContent) {
-                mainContent.classList.remove('screen-tap');
-            }
-        }, 800);
     });
-
-    // Добавляем пульсацию для привлечения внимания (только на мобильных)
-    function addQrPulse() {
-        if (window.innerWidth <= 768) {
-            qrCodeEl.classList.add('pulse');
-        }
-    }
-
-    // Убираем пульсацию при взаимодействии и добавляем touch-анимацию
-    qrCodeEl.addEventListener('touchstart', function() {
-        this.classList.remove('pulse');
-        // Добавляем легкую анимацию при касании
-        this.style.transform = 'scale(0.98)';
-    });
-
-    qrCodeEl.addEventListener('touchend', function() {
-        // Возвращаем к нормальному размеру
-        this.style.transform = 'scale(1)';
-    });
-
-    // Запускаем пульсацию через 3 секунды после загрузки
-    setTimeout(addQrPulse, 3000);
     
     // Обновление имени пользователя с задержкой
     setTimeout(updateUsername, 1000);
