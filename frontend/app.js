@@ -2,8 +2,15 @@
 if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
     Telegram.WebApp.ready();
     Telegram.WebApp.expand();
-    Telegram.WebApp.setHeaderColor('#000');
-    Telegram.WebApp.setBackgroundColor('#000');
+    Telegram.WebApp.setHeaderColor('#000000');
+    Telegram.WebApp.setBackgroundColor('#000000');
+    Telegram.WebApp.enableClosingConfirmation();
+    
+    // Настройка темы
+    if (Telegram.WebApp.colorScheme === 'dark') {
+        Telegram.WebApp.setHeaderColor('#000000');
+        Telegram.WebApp.setBackgroundColor('#000000');
+    }
     
     // Принудительный сброс отступов
     setTimeout(() => {
@@ -11,9 +18,18 @@ if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
         document.body.style.padding = '0';
         document.documentElement.style.margin = '0';
         document.documentElement.style.padding = '0';
+        
+        // Убираем возможные отступы от Telegram
+        const telegramRoot = document.getElementById('telegram-web-app');
+        if (telegramRoot) {
+            telegramRoot.style.margin = '0';
+            telegramRoot.style.padding = '0';
+        }
     }, 100);
+    
+    console.log('Telegram WebApp инициализирован');
 } else {
-    console.warn('Telegram WebApp не доступен');
+    console.warn('Telegram WebApp не доступен - работаем в режиме браузера');
 }
 
 // Получаем элементы DOM
@@ -29,8 +45,10 @@ const cafeBtnEl = document.getElementById("cafe-btn");
 
 // Состояние приложения
 let isCafeActive = false;
+let isHistoryActive = false;
 let startX = 0;
 let startY = 0;
+let currentUser = null;
 
 // Плавная анимация появления элемента
 function animateElement(element, delay = 0) {
@@ -57,8 +75,18 @@ function updatePoints(points) {
 function generateQRCode(data) {
     qrCodeEl.innerHTML = '';
     try {
+        if (!data || data === 'error') {
+            qrCodeEl.innerHTML = '<div style="padding:12px;color:#333;text-align:center;font-size:14px;">QR недоступен</div>';
+            return;
+        }
+        
+        if (data === 'guest') {
+            qrCodeEl.innerHTML = '<div style="padding:12px;color:#333;text-align:center;font-size:14px;">Войдите в Telegram</div>';
+            return;
+        }
+        
         new QRCode(qrCodeEl, {
-            text: String(data ?? ''),
+            text: String(data),
             width: 180,
             height: 180,
             colorDark: '#000000',
@@ -66,7 +94,7 @@ function generateQRCode(data) {
             correctLevel: QRCode.CorrectLevel.M
         });
     } catch (e) {
-        qrCodeEl.innerHTML = '<div style="padding:12px;color:#333;">QR недоступен</div>';
+        qrCodeEl.innerHTML = '<div style="padding:12px;color:#333;text-align:center;font-size:14px;">QR недоступен</div>';
         console.error('QR render error', e);
     }
 }
@@ -83,6 +111,11 @@ function showCafeInfo() {
     mainContentEl.classList.add('overlay-active');
     cafeOverlayEl.classList.add('active');
     createHapticFeedback();
+    
+    // Показываем кнопку "Назад" в Telegram
+    if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+        Telegram.WebApp.BackButton.show();
+    }
 }
 
 // Скрыть информацию о кафе
@@ -92,6 +125,84 @@ function hideCafeInfo() {
     mainContentEl.classList.remove('overlay-active');
     cafeOverlayEl.classList.remove('active');
     createHapticFeedback();
+    
+    // Скрываем кнопку "Назад" в Telegram
+    if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+        Telegram.WebApp.BackButton.hide();
+    }
+}
+
+// Загрузка истории транзакций
+async function loadTransactionHistory() {
+    if (!currentUser) {
+        console.warn('Пользователь не найден для загрузки истории');
+        return [];
+    }
+    
+    try {
+        const resp = await fetch(`/transactions/history?user_id=${currentUser.id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!resp.ok) throw new Error('History fetch failed');
+        const transactions = await resp.json();
+        return transactions;
+    } catch (err) {
+        console.error('Transaction history load error', err);
+        return [];
+    }
+}
+
+// Показать историю транзакций
+async function showTransactionHistory() {
+    isHistoryActive = true;
+    createHapticFeedback();
+    
+    // Показываем загрузку
+    const historyBtn = document.getElementById('history-btn');
+    const originalText = historyBtn.textContent;
+    historyBtn.textContent = 'Загрузка...';
+    historyBtn.disabled = true;
+    
+    try {
+        const transactions = await loadTransactionHistory();
+        
+        if (transactions.length === 0) {
+            if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+                Telegram.WebApp.showAlert('История покупок пуста');
+            } else {
+                alert('История покупок пуста');
+            }
+        } else {
+            // Форматируем и показываем историю
+            const historyText = transactions.map(tx => {
+                const date = new Date(tx.created_at).toLocaleDateString('ru-RU');
+                const points = tx.points_change > 0 ? `+${tx.points_change}` : tx.points_change;
+                return `${date}: ${tx.amount}₽ (${points} баллов)`;
+            }).join('\n');
+            
+            // Используем Telegram WebApp для показа уведомления
+            if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+                Telegram.WebApp.showAlert(`История покупок:\n\n${historyText}`);
+            } else {
+                alert(`История покупок:\n\n${historyText}`);
+            }
+        }
+    } catch (err) {
+        console.error('History display error', err);
+        if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+            Telegram.WebApp.showAlert('Ошибка загрузки истории');
+        } else {
+            alert('Ошибка загрузки истории');
+        }
+    } finally {
+        historyBtn.textContent = originalText;
+        historyBtn.disabled = false;
+        isHistoryActive = false;
+    }
 }
 
 // Обработка swipe-жестов
@@ -186,22 +297,83 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            const resp = await fetch('/users/profile', {
-                method: 'POST',
+            // Показываем индикатор загрузки
+            pointsEl.textContent = 'Загрузка...';
+            
+            const resp = await fetch(`/users/profile?telegram_id=${telegramId}`, {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ telegram_id: String(telegramId) })
+                }
             });
-            if (!resp.ok) throw new Error('Profile fetch failed');
-            const data = await resp.json();
+            
+            if (!resp.ok) {
+                if (resp.status === 404) {
+                    // Пользователь не найден - создаем нового
+                    console.log('Пользователь не найден, создаем нового');
+                    const createResp = await fetch('/users/init', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            telegram_id: telegramId,
+                            nick_name: user.first_name || user.username || `user_${telegramId}`
+                        })
+                    });
+                    
+                    if (createResp.ok) {
+                        // Перезагружаем профиль после создания
+                        const profileResp = await fetch(`/users/profile?telegram_id=${telegramId}`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                        
+                        if (profileResp.ok) {
+                            const data = await profileResp.json();
+                            currentUser = {
+                                id: telegramId,
+                                nick_name: data.nick_name,
+                                points: data.points,
+                                qr_code: data.qr_code
+                            };
+                            updatePoints(Number(data.points ?? 0));
+                            generateQRCode(String(data.qr_code ?? ''));
+                        } else {
+                            throw new Error('Failed to load profile after creation');
+                        }
+                    } else {
+                        throw new Error('Failed to create user');
+                    }
+                } else {
+                    throw new Error(`Profile fetch failed: ${resp.status}`);
+                }
+            } else {
+                const data = await resp.json();
+                
+                // Сохраняем данные пользователя
+                currentUser = {
+                    id: telegramId,
+                    nick_name: data.nick_name,
+                    points: data.points,
+                    qr_code: data.qr_code
+                };
 
-            updatePoints(Number(data.points ?? 0));
-            generateQRCode(String(data.qr_code ?? ''));
+                updatePoints(Number(data.points ?? 0));
+                generateQRCode(String(data.qr_code ?? ''));
+            }
         } catch (err) {
             console.error('Profile load error', err);
             updatePoints(0);
-            generateQRCode('');
+            generateQRCode('error');
+            // Показываем уведомление об ошибке
+            setTimeout(() => {
+                if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+                    Telegram.WebApp.showAlert('Ошибка загрузки данных. Проверьте подключение к интернету.');
+                }
+            }, 1000);
         }
     })();
     
@@ -241,13 +413,28 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('touchstart', handleTouchStart, { passive: true });
     document.addEventListener('touchend', handleTouchEnd, { passive: true });
 
-    // Остальные кнопки
-    ['history-btn', 'loyalty-btn'].forEach(id => {
-        document.getElementById(id).onclick = function() {
-            createHapticFeedback();
-            alert('Этот раздел будет доступен в следующем обновлении');
+    // Обработчик кнопки истории
+    const historyBtn = document.getElementById('history-btn');
+    if (historyBtn) {
+        historyBtn.onclick = function() {
+            showTransactionHistory();
         };
-    });
+    }
+
+    // Обработчик кнопки лояльности
+    const loyaltyBtn = document.getElementById('loyalty-btn');
+    if (loyaltyBtn) {
+        loyaltyBtn.onclick = function() {
+            createHapticFeedback();
+            const loyaltyText = 'Система лояльности:\n\n• За каждую покупку вы получаете баллы\n• 1 балл = 1 рубль скидки\n• Баллы накапливаются и не сгорают\n• Используйте QR-код для оплаты';
+            
+            if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+                Telegram.WebApp.showAlert(loyaltyText);
+            } else {
+                alert(loyaltyText);
+            }
+        };
+    }
     
     // Анимация при клике на QR-код
     qrCodeEl.addEventListener('click', function() {
@@ -262,4 +449,37 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(updateUsername, 1000);
     setTimeout(updateUsername, 2000);
     setTimeout(updateUsername, 3000);
+    
+    // Обработка кнопки "Назад" в Telegram
+    if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+        Telegram.WebApp.onEvent('backButtonClicked', function() {
+            if (isCafeActive) {
+                hideCafeInfo();
+            } else {
+                Telegram.WebApp.close();
+            }
+        });
+        
+        // Показываем кнопку "Назад" только когда нужно
+        Telegram.WebApp.BackButton.hide();
+    }
+    
+    // Обработка изменения размера экрана
+    function handleResize() {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+        
+        // Обновляем высоту контейнера для мобильных устройств
+        const container = document.querySelector('.container');
+        if (container) {
+            container.style.minHeight = `${window.innerHeight}px`;
+        }
+    }
+    
+    // Инициализация и обработка изменения размера
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', () => {
+        setTimeout(handleResize, 100);
+    });
 });

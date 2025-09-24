@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Query
 from app.repository.user import get_user_by_telegram_id, create_user
-from app.schemas.user import UserIn, UserProfileRequest
+from app.schemas.user import UserIn
 import hashlib
 import time
 
