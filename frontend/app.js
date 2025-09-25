@@ -89,8 +89,8 @@ function generateQRCode(data) {
             text: String(data),
             width: 210,
             height: 210,
-            colorDark: '#ffffff',
-            colorLight: 'transparent',
+            colorDark: '#000000',
+            colorLight: '#ffffff',
             correctLevel: QRCode.CorrectLevel.M
         });
     } catch (e) {
@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 qr_code: data.qr_code
                             };
                             updatePoints(Number(data.points ?? 0));
-                            generateQRCode(String(data.qr_code ?? ''));
+                            generateQRCode(`user_${telegramId}`);
                         } else {
                             throw new Error('Failed to load profile after creation');
                         }
@@ -362,7 +362,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 };
 
                 updatePoints(Number(data.points ?? 0));
-                generateQRCode(String(data.qr_code ?? ''));
+                generateQRCode(`user_${telegramId}`);
             }
         } catch (err) {
             console.error('Profile load error', err);
