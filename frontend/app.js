@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 qr_code: data.qr_code
                             };
                             updatePoints(Number(data.points ?? 0));
-                            generateQRCode(`user_${telegramId}`);
+                            generateQRCode(telegramId);
                         } else {
                             throw new Error('Failed to load profile after creation');
                         }
@@ -362,7 +362,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 };
 
                 updatePoints(Number(data.points ?? 0));
-                generateQRCode(`user_${telegramId}`);
+                generateQRCode(telegramId);
             }
         } catch (err) {
             console.error('Profile load error', err);
