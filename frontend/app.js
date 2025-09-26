@@ -427,20 +427,6 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    // Обработчик кнопки лояльности
-    const loyaltyBtn = document.getElementById('loyalty-btn');
-    if (loyaltyBtn) {
-        loyaltyBtn.onclick = function() {
-            createHapticFeedback();
-            const loyaltyText = 'Система лояльности:\n\n• За каждую покупку вы получаете баллы\n• 1 балл = 1 рубль скидки\n• Баллы накапливаются и не сгорают\n• Используйте QR-код для оплаты';
-            
-            if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-                Telegram.WebApp.showAlert(loyaltyText);
-            } else {
-                alert(loyaltyText);
-            }
-        };
-    }
     
     // Простой клик на QR-код без анимаций
     qrCodeEl.addEventListener('click', function() {
