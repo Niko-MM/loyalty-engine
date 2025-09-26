@@ -38,13 +38,9 @@ const pointsEl = document.getElementById("points");
 const logoEl = document.getElementById("logo");
 const qrCodeEl = document.getElementById("qr-code");
 const mainContentEl = document.getElementById("mainContent");
-const cafeOverlayEl = document.getElementById("cafeOverlay");
-const cafeTextEl = document.getElementById("cafeText");
-const closeBtnEl = document.getElementById("closeBtn");
 const cafeBtnEl = document.getElementById("cafe-btn");
 
 // Состояние приложения
-let isCafeActive = false;
 let isHistoryActive = false;
 let startX = 0;
 let startY = 0;
@@ -104,33 +100,6 @@ function createHapticFeedback() {
     if ('vibrate' in navigator) navigator.vibrate(30);
 }
 
-// Показать информацию о кафе
-function showCafeInfo() {
-    isCafeActive = true;
-    cafeBtnEl.classList.add('active');
-    mainContentEl.classList.add('overlay-active');
-    cafeOverlayEl.classList.add('active');
-    createHapticFeedback();
-    
-    // Показываем кнопку "Назад" в Telegram
-    if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-        Telegram.WebApp.BackButton.show();
-    }
-}
-
-// Скрыть информацию о кафе
-function hideCafeInfo() {
-    isCafeActive = false;
-    cafeBtnEl.classList.remove('active');
-    mainContentEl.classList.remove('overlay-active');
-    cafeOverlayEl.classList.remove('active');
-    createHapticFeedback();
-    
-    // Скрываем кнопку "Назад" в Telegram
-    if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-        Telegram.WebApp.BackButton.hide();
-    }
-}
 
 // Загрузка истории транзакций
 async function loadTransactionHistory() {
@@ -212,20 +181,7 @@ function handleTouchStart(e) {
 }
 
 function handleTouchEnd(e) {
-    if (!isCafeActive) return;
-    
-    const endX = e.changedTouches[0].clientX;
-    const endY = e.changedTouches[0].clientY;
-    const deltaX = startX - endX;
-    const deltaY = startY - endY;
-    
-    // Проверяем, что это горизонтальный свайп
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
-        if (deltaX > 0) {
-            // Свайп влево - закрываем
-            hideCafeInfo();
-        }
-    }
+    // Обработка свайпов удалена
 }
 
 // Получение данных пользователя из Telegram WebApp
@@ -280,7 +236,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Проверяем элементы
     console.log('Кнопка cafe-btn найдена:', cafeBtnEl);
-    console.log('Элемент cafeOverlay найден:', cafeOverlayEl);
     
     // Обновляем имя пользователя
     updateUsername();
@@ -387,31 +342,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (el) animateElement(el, i * 200);
     });
     
-    // Обработчик кнопки "О кафе"
+    // Обработчик кнопки "О кафе" (пустой)
     if (cafeBtnEl) {
-        cafeBtnEl.onclick = async function() {
-            console.log('Кнопка "О кафе" нажата!');
-            
-            if (isCafeActive) {
-                hideCafeInfo();
-                return;
-            }
-            
-            showCafeInfo();
-            cafeTextEl.textContent = 'Загрузка информации...';
-
-            // На этом этапе текст о кафе не подгружаем с сервера — оставляем как есть
-            cafeTextEl.textContent = 'Информация появится позже';
-        };
-        console.log('Обработчик для cafe-btn установлен');
-    } else {
-        console.error('Кнопка cafe-btn не найдена!');
-    }
-
-    // Обработчик кнопки закрытия
-    if (closeBtnEl) {
-        closeBtnEl.onclick = function() {
-            hideCafeInfo();
+        cafeBtnEl.onclick = function() {
+            // Ничего не делаем
         };
     }
 
@@ -492,14 +426,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Обработка кнопки "Назад" в Telegram
     if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
         Telegram.WebApp.onEvent('backButtonClicked', function() {
-            if (isCafeActive) {
-                hideCafeInfo();
-            } else {
-                Telegram.WebApp.close();
-            }
+            Telegram.WebApp.close();
         });
         
-        // Показываем кнопку "Назад" только когда нужно
+        // Скрываем кнопку "Назад"
         Telegram.WebApp.BackButton.hide();
     }
     
