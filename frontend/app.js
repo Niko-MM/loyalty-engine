@@ -41,7 +41,6 @@ const mainContentEl = document.getElementById("mainContent");
 const cafeBtnEl = document.getElementById("cafe-btn");
 
 // Состояние приложения
-let isHistoryActive = false;
 let startX = 0;
 let startY = 0;
 let currentUser = null;
@@ -101,78 +100,6 @@ function createHapticFeedback() {
 }
 
 
-// Загрузка истории транзакций
-async function loadTransactionHistory() {
-    if (!currentUser) {
-        console.warn('Пользователь не найден для загрузки истории');
-        return [];
-    }
-    
-    try {
-        const resp = await fetch(`/transactions/history?user_id=${currentUser.id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        
-        if (!resp.ok) throw new Error('History fetch failed');
-        const transactions = await resp.json();
-        return transactions;
-    } catch (err) {
-        console.error('Transaction history load error', err);
-        return [];
-    }
-}
-
-// Показать историю транзакций
-async function showTransactionHistory() {
-    isHistoryActive = true;
-    createHapticFeedback();
-    
-    // Показываем загрузку
-    const historyBtn = document.getElementById('history-btn');
-    const originalText = historyBtn.textContent;
-    historyBtn.textContent = 'Загрузка...';
-    historyBtn.disabled = true;
-    
-    try {
-        const transactions = await loadTransactionHistory();
-        
-        if (transactions.length === 0) {
-            if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-                Telegram.WebApp.showAlert('История покупок пуста');
-            } else {
-                alert('История покупок пуста');
-            }
-        } else {
-            // Форматируем и показываем историю
-            const historyText = transactions.map(tx => {
-                const date = new Date(tx.created_at).toLocaleDateString('ru-RU');
-                const points = tx.points_change > 0 ? `+${tx.points_change}` : tx.points_change;
-                return `${date}: ${tx.amount}₽ (${points} баллов)`;
-            }).join('\n');
-            
-            // Используем Telegram WebApp для показа уведомления
-            if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-                Telegram.WebApp.showAlert(`История покупок:\n\n${historyText}`);
-            } else {
-                alert(`История покупок:\n\n${historyText}`);
-            }
-        }
-    } catch (err) {
-        console.error('History display error', err);
-        if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-            Telegram.WebApp.showAlert('Ошибка загрузки истории');
-        } else {
-            alert('Ошибка загрузки истории');
-        }
-    } finally {
-        historyBtn.textContent = originalText;
-        historyBtn.disabled = false;
-        isHistoryActive = false;
-    }
-}
 
 // Обработка swipe-жестов
 function handleTouchStart(e) {
@@ -353,11 +280,11 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('touchstart', handleTouchStart, { passive: true });
     document.addEventListener('touchend', handleTouchEnd, { passive: true });
 
-    // Обработчик кнопки истории
+    // Обработчик кнопки истории (пустой)
     const historyBtn = document.getElementById('history-btn');
     if (historyBtn) {
         historyBtn.onclick = function() {
-            showTransactionHistory();
+            // Ничего не делаем
         };
     }
 
