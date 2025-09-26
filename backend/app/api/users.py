@@ -38,5 +38,3 @@ async def user_info(telegram_id: int = Query(...)):
 
 def generate_qr_code(telegram_id):
     return str(telegram_id)
-
-#
