@@ -278,14 +278,14 @@ document.addEventListener('DOMContentLoaded', function() {
             let transformValue;
             
             if (screenWidth <= 360) {
-                // Для маленьких экранов: логотип 260px, QR 165px, середина ~75px от логотипа
-                transformValue = 'translateY(-75px)';
+                // Для маленьких экранов: позиционируем дальше от логотипа
+                transformValue = 'translateY(-40px)';
             } else if (screenWidth <= 480) {
-                // Для мобильных: логотип 300px, QR 188px, середина ~94px от логотипа
-                transformValue = 'translateY(-94px)';
+                // Для мобильных: позиционируем дальше от логотипа
+                transformValue = 'translateY(-45px)';
             } else {
-                // Для десктопа: логотип 360px, QR 210px, середина ~105px от логотипа
-                transformValue = 'translateY(-105px)';
+                // Для десктопа: позиционируем дальше от логотипа
+                transformValue = 'translateY(-50px)';
             }
             
             userInfo.style.transform = transformValue;
@@ -401,14 +401,14 @@ document.addEventListener('DOMContentLoaded', function() {
             let transformValue;
             
             if (screenWidth <= 360) {
-                // Для маленьких экранов: логотип 260px, QR 165px, середина ~75px от логотипа
-                transformValue = 'translateY(-75px)';
+                // Для маленьких экранов: позиционируем дальше от логотипа
+                transformValue = 'translateY(-40px)';
             } else if (screenWidth <= 480) {
-                // Для мобильных: логотип 300px, QR 188px, середина ~94px от логотипа
-                transformValue = 'translateY(-94px)';
+                // Для мобильных: позиционируем дальше от логотипа
+                transformValue = 'translateY(-45px)';
             } else {
-                // Для десктопа: логотип 360px, QR 210px, середина ~105px от логотипа
-                transformValue = 'translateY(-105px)';
+                // Для десктопа: позиционируем дальше от логотипа
+                transformValue = 'translateY(-50px)';
             }
             
             userInfo.style.transform = transformValue;
