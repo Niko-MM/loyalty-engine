@@ -327,7 +327,7 @@
         .username {
             font-size: 1.9rem !important;
             font-weight: 500 !important;
-            margin-bottom: 3px;
+            margin-bottom: 8px !important;
             letter-spacing: -0.2px;
             text-align: center;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
@@ -337,6 +337,34 @@
             position: relative;
             z-index: 2;
             transition: all 0.3s ease;
+            transform: translateY(-5px) !important;
+        }
+
+        /* Свечение снизу для ника */
+        .username::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 20px;
+            background: radial-gradient(ellipse, rgba(255,255,255,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 1;
+            animation: usernameGlow 3s ease-in-out infinite;
+        }
+
+        /* Анимация свечения */
+        @keyframes usernameGlow {
+            0%, 100% { 
+                opacity: 0.3;
+                transform: translateX(-50%) scale(1);
+            }
+            50% { 
+                opacity: 0.6;
+                transform: translateX(-50%) scale(1.1);
+            }
         }
 
         .points {
@@ -674,11 +702,19 @@
             }
             
             .username {
-                font-size: 1.5rem;
-                margin-bottom: 2px;
-                font-weight: 500;
-                color: #ffffff;
-                opacity: 0.9;
+                font-size: 1.5rem !important;
+                margin-bottom: 6px !important;
+                font-weight: 500 !important;
+                color: #ffffff !important;
+                opacity: 0.9 !important;
+                transform: translateY(-3px) !important;
+            }
+
+            /* Мобильное свечение для ника */
+            .username::after {
+                width: 70% !important;
+                height: 15px !important;
+                bottom: -12px !important;
             }
             
             .points {
@@ -803,11 +839,19 @@
             }
             
             .username {
-                font-size: 1.3rem;
-                margin-bottom: 2px;
-                font-weight: 500;
-                color: #ffffff;
-                opacity: 0.9;
+                font-size: 1.3rem !important;
+                margin-bottom: 5px !important;
+                font-weight: 500 !important;
+                color: #ffffff !important;
+                opacity: 0.9 !important;
+                transform: translateY(-2px) !important;
+            }
+
+            /* Свечение для маленьких экранов */
+            .username::after {
+                width: 60% !important;
+                height: 12px !important;
+                bottom: -10px !important;
             }
             
             .points {
@@ -916,6 +960,6 @@
         <button class="menu-btn" id="loyalty-btn">Система лояльности</button>
     </div>
     
-    <script src="app.js?v=2.4"></script>
+    <script src="app.js?v=2.5"></script>
 </body>
 </html>
