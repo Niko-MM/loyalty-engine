@@ -344,26 +344,26 @@
         .username::after {
             content: '';
             position: absolute;
-            bottom: -15px;
+            bottom: -20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 80%;
-            height: 20px;
-            background: radial-gradient(ellipse, rgba(255,255,255,0.15) 0%, transparent 70%);
+            width: 120%;
+            height: 30px;
+            background: radial-gradient(ellipse, rgba(34, 197, 94, 0.25) 0%, rgba(255,255,255,0.1) 30%, transparent 70%);
             border-radius: 50%;
             z-index: 1;
-            animation: usernameGlow 3s ease-in-out infinite;
+            animation: usernameGlow 6s ease-in-out infinite;
         }
 
-        /* Анимация свечения */
+        /* Плавная анимация свечения */
         @keyframes usernameGlow {
             0%, 100% { 
-                opacity: 0.3;
+                opacity: 0.4;
                 transform: translateX(-50%) scale(1);
             }
             50% { 
-                opacity: 0.6;
-                transform: translateX(-50%) scale(1.1);
+                opacity: 0.7;
+                transform: translateX(-50%) scale(1.05);
             }
         }
 
@@ -712,9 +712,10 @@
 
             /* Мобильное свечение для ника */
             .username::after {
-                width: 70% !important;
-                height: 15px !important;
-                bottom: -12px !important;
+                width: 100% !important;
+                height: 25px !important;
+                bottom: -18px !important;
+                background: radial-gradient(ellipse, rgba(34, 197, 94, 0.2) 0%, rgba(255,255,255,0.08) 30%, transparent 70%) !important;
             }
             
             .points {
@@ -849,9 +850,10 @@
 
             /* Свечение для маленьких экранов */
             .username::after {
-                width: 60% !important;
-                height: 12px !important;
-                bottom: -10px !important;
+                width: 90% !important;
+                height: 20px !important;
+                bottom: -15px !important;
+                background: radial-gradient(ellipse, rgba(34, 197, 94, 0.18) 0%, rgba(255,255,255,0.06) 30%, transparent 70%) !important;
             }
             
             .points {
@@ -960,6 +962,6 @@
         <button class="menu-btn" id="loyalty-btn">Система лояльности</button>
     </div>
     
-    <script src="app.js?v=2.5"></script>
+    <script src="app.js?v=2.6"></script>
 </body>
 </html>
