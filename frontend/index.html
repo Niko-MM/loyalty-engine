@@ -349,7 +349,7 @@
             transform: translateX(-50%);
             width: 140%;
             height: 35px;
-            background: radial-gradient(ellipse, rgba(34, 197, 94, 0.4) 0%, rgba(255,255,255,0.15) 30%, transparent 70%);
+            background: radial-gradient(ellipse, rgba(162, 183, 110, 0.4) 0%, rgba(255,255,255,0.15) 30%, transparent 70%);
             border-radius: 50%;
             z-index: 1;
         }
@@ -487,17 +487,14 @@
         }
 
         .cafe-title {
-            font-size: 3rem;
+            font-size: 2rem;
             font-weight: 700;
             margin-bottom: 25px;
             text-align: center;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-            transition: all 0.3s ease;
-        }
-
-        .cafe-title:hover {
-            transform: scale(1.1);
-            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
+            background: linear-gradient(135deg, #22c55e 0%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .cafe-text {
@@ -822,7 +819,7 @@
                 width: 120% !important;
                 height: 30px !important;
                 bottom: -22px !important;
-                background: radial-gradient(ellipse, rgba(34, 197, 94, 0.35) 0%, rgba(255,255,255,0.12) 30%, transparent 70%) !important;
+                background: radial-gradient(ellipse, rgba(162, 183, 110, 0.35) 0%, rgba(255,255,255,0.12) 30%, transparent 70%) !important;
             }
             
             .points {
@@ -992,7 +989,7 @@
                 width: 110% !important;
                 height: 25px !important;
                 bottom: -18px !important;
-                background: radial-gradient(ellipse, rgba(34, 197, 94, 0.3) 0%, rgba(255,255,255,0.1) 30%, transparent 70%) !important;
+                background: radial-gradient(ellipse, rgba(162, 183, 110, 0.3) 0%, rgba(255,255,255,0.1) 30%, transparent 70%) !important;
             }
             
             .points {
@@ -1087,10 +1084,10 @@
     <div class="cafe-overlay" id="cafeOverlay">
         <button class="close-btn" id="closeBtn">×</button>
         <div class="cafe-content">
-                <div class="cafe-title">🌱</div>
+                <div class="cafe-title">TastyLab</div>
             <div class="cafe-text" id="cafeText">
                 <div class="info-section">
-                    <div class="info-icon">🌱</div>
+                    <div class="info-icon">🍽️</div>
                     <h3>TastyLab GREEN</h3>
                     <p>Правильное и сбалансированное питание для <strong>ВСЕХ</strong>, кто заботится о своем <strong>ЗДОРОВЬЕ</strong>.</p>
                     <p>Профессиональная ассоциация поваров, кондитеров и пекарей, специализирующихся на приготовлении вкуснейших блюд и десертов европейской, китайской, итальянской и японской кухни в Калининграде.</p>
@@ -1166,6 +1163,6 @@
         <button class="menu-btn" id="loyalty-btn">Система лояльности</button>
     </div>
     
-    <script src="app.js?v=2.8"></script>
+    <script src="app.js?v=2.9"></script>
 </body>
 </html>
