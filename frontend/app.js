@@ -296,8 +296,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (cafeBtnEl) {
         cafeBtnEl.onclick = function() {
             const cafeOverlay = document.getElementById('cafeOverlay');
+            const closeBtn = document.getElementById('closeBtn');
             if (cafeOverlay) {
                 cafeOverlay.classList.add('active');
+                if (closeBtn) {
+                    closeBtn.classList.add('show');
+                }
                 document.body.style.overflow = 'hidden'; // Предотвращаем прокрутку фона
             }
         };
@@ -310,6 +314,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const cafeOverlay = document.getElementById('cafeOverlay');
             if (cafeOverlay) {
                 cafeOverlay.classList.remove('active');
+                closeBtn.classList.remove('show');
                 document.body.style.overflow = 'auto'; // Восстанавливаем прокрутку
             }
         };
@@ -321,6 +326,7 @@ document.addEventListener('DOMContentLoaded', function() {
         cafeOverlay.onclick = function(e) {
             if (e.target === cafeOverlay) {
                 cafeOverlay.classList.remove('active');
+                closeBtn.classList.remove('show');
                 document.body.style.overflow = 'auto';
             }
         };

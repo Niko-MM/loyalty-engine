@@ -616,10 +616,14 @@
             transition: all 0.2s ease;
             backdrop-filter: blur(15px);
             z-index: 1003;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .close-btn.show {
+            display: flex;
         }
 
         .close-btn:hover {
@@ -1082,7 +1086,6 @@
     </div>
     
     <div class="cafe-overlay" id="cafeOverlay">
-        <button class="close-btn" id="closeBtn">×</button>
         <div class="cafe-content">
             <div class="cafe-text" id="cafeText">
                 <div class="info-section">
@@ -1152,6 +1155,9 @@
         </div>
     </div>
     
+    <!-- Крестик для закрытия модального окна -->
+    <button class="close-btn" id="closeBtn">×</button>
+    
     <div class="bottom-menu">
         <button class="menu-btn" id="history-btn">История покупок</button>
         <button id="cafe-btn" class="action-btn">
@@ -1161,6 +1167,6 @@
         <button class="menu-btn" id="loyalty-btn">Система лояльности</button>
     </div>
     
-    <script src="app.js?v=3.4"></script>
+    <script src="app.js?v=3.5"></script>
 </body>
 </html>
