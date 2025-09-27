@@ -601,8 +601,9 @@
 
         .close-btn {
             position: fixed;
-            top: 40px;
-            right: 10px;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
             width: 45px;
             height: 45px;
             border-radius: 50%;
@@ -624,12 +625,12 @@
         .close-btn:hover {
             background: rgba(255,255,255,0.2);
             border-color: rgba(255,255,255,0.5);
-            transform: scale(1.1);
+            transform: translateY(-50%) scale(1.1);
             box-shadow: 0 6px 16px rgba(0,0,0,0.6);
         }
 
         .close-btn:active {
-            transform: scale(0.95);
+            transform: translateY(-50%) scale(0.95);
         }
 
         /* Нижнее меню */
@@ -1160,6 +1161,6 @@
         <button class="menu-btn" id="loyalty-btn">Система лояльности</button>
     </div>
     
-    <script src="app.js?v=3.2"></script>
+    <script src="app.js?v=3.3"></script>
 </body>
 </html>
