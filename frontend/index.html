@@ -344,27 +344,14 @@
         .username::after {
             content: '';
             position: absolute;
-            bottom: -20px;
+            bottom: -25px;
             left: 50%;
             transform: translateX(-50%);
-            width: 120%;
-            height: 30px;
-            background: radial-gradient(ellipse, rgba(34, 197, 94, 0.25) 0%, rgba(255,255,255,0.1) 30%, transparent 70%);
+            width: 140%;
+            height: 35px;
+            background: radial-gradient(ellipse, rgba(34, 197, 94, 0.4) 0%, rgba(255,255,255,0.15) 30%, transparent 70%);
             border-radius: 50%;
             z-index: 1;
-            animation: usernameGlow 6s ease-in-out infinite;
-        }
-
-        /* Плавная анимация свечения */
-        @keyframes usernameGlow {
-            0%, 100% { 
-                opacity: 0.4;
-                transform: translateX(-50%) scale(1);
-            }
-            50% { 
-                opacity: 0.7;
-                transform: translateX(-50%) scale(1.05);
-            }
         }
 
         .points {
@@ -500,14 +487,17 @@
         }
 
         .cafe-title {
-            font-size: 2rem;
+            font-size: 3rem;
             font-weight: 700;
             margin-bottom: 25px;
             text-align: center;
-            background: linear-gradient(135deg, #22c55e 0%, #ffffff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            transition: all 0.3s ease;
+        }
+
+        .cafe-title:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
         }
 
         .cafe-text {
@@ -618,24 +608,36 @@
         }
 
         .close-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            border: none;
+            background: rgba(0,0,0,0.8);
+            border: 2px solid rgba(255,255,255,0.3);
             color: #fff;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
+            font-weight: bold;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
 
         .close-btn:hover {
             background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.5);
             transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+        }
+
+        .close-btn:active {
+            transform: scale(0.95);
         }
 
         /* Нижнее меню */
@@ -817,10 +819,10 @@
 
             /* Мобильное свечение для ника */
             .username::after {
-                width: 100% !important;
-                height: 25px !important;
-                bottom: -18px !important;
-                background: radial-gradient(ellipse, rgba(34, 197, 94, 0.2) 0%, rgba(255,255,255,0.08) 30%, transparent 70%) !important;
+                width: 120% !important;
+                height: 30px !important;
+                bottom: -22px !important;
+                background: radial-gradient(ellipse, rgba(34, 197, 94, 0.35) 0%, rgba(255,255,255,0.12) 30%, transparent 70%) !important;
             }
             
             .points {
@@ -987,10 +989,10 @@
 
             /* Свечение для маленьких экранов */
             .username::after {
-                width: 90% !important;
-                height: 20px !important;
-                bottom: -15px !important;
-                background: radial-gradient(ellipse, rgba(34, 197, 94, 0.18) 0%, rgba(255,255,255,0.06) 30%, transparent 70%) !important;
+                width: 110% !important;
+                height: 25px !important;
+                bottom: -18px !important;
+                background: radial-gradient(ellipse, rgba(34, 197, 94, 0.3) 0%, rgba(255,255,255,0.1) 30%, transparent 70%) !important;
             }
             
             .points {
@@ -1085,7 +1087,7 @@
     <div class="cafe-overlay" id="cafeOverlay">
         <button class="close-btn" id="closeBtn">×</button>
         <div class="cafe-content">
-            <div class="cafe-title">О TastyLab</div>
+                <div class="cafe-title">🌱</div>
             <div class="cafe-text" id="cafeText">
                 <div class="info-section">
                     <div class="info-icon">🌱</div>
@@ -1158,12 +1160,12 @@
     <div class="bottom-menu">
         <button class="menu-btn" id="history-btn">История покупок</button>
         <button id="cafe-btn" class="action-btn">
-            <i class="icon">☕</i>
-            <span>О кафе</span>
+            <i class="icon">ℹ️</i>
+            <span>Информация</span>
         </button>
         <button class="menu-btn" id="loyalty-btn">Система лояльности</button>
     </div>
     
-    <script src="app.js?v=2.7"></script>
+    <script src="app.js?v=2.8"></script>
 </body>
 </html>
