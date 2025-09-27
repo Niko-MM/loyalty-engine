@@ -278,11 +278,14 @@ document.addEventListener('DOMContentLoaded', function() {
             let transformValue;
             
             if (screenWidth <= 360) {
-                transformValue = 'translateY(-70px)'; // Очень маленькие экраны
+                // Для маленьких экранов: логотип 260px, QR 165px, середина ~75px от логотипа
+                transformValue = 'translateY(-75px)';
             } else if (screenWidth <= 480) {
-                transformValue = 'translateY(-80px)'; // Мобильные устройства
+                // Для мобильных: логотип 300px, QR 188px, середина ~94px от логотипа
+                transformValue = 'translateY(-94px)';
             } else {
-                transformValue = 'translateY(-60px)'; // Десктоп
+                // Для десктопа: логотип 360px, QR 210px, середина ~105px от логотипа
+                transformValue = 'translateY(-105px)';
             }
             
             userInfo.style.transform = transformValue;
@@ -398,11 +401,14 @@ document.addEventListener('DOMContentLoaded', function() {
             let transformValue;
             
             if (screenWidth <= 360) {
-                transformValue = 'translateY(-70px)';
+                // Для маленьких экранов: логотип 260px, QR 165px, середина ~75px от логотипа
+                transformValue = 'translateY(-75px)';
             } else if (screenWidth <= 480) {
-                transformValue = 'translateY(-80px)';
+                // Для мобильных: логотип 300px, QR 188px, середина ~94px от логотипа
+                transformValue = 'translateY(-94px)';
             } else {
-                transformValue = 'translateY(-60px)';
+                // Для десктопа: логотип 360px, QR 210px, середина ~105px от логотипа
+                transformValue = 'translateY(-105px)';
             }
             
             userInfo.style.transform = transformValue;
