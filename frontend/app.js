@@ -264,10 +264,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const userInfo = document.querySelector('.user-info');
     const qrSection = document.querySelector('.qr-section');
     
-    const elements = [headerSection, userInfo, qrSection];
+    // Исключаем user-info из анимации, так как у него есть свой transform
+    const elements = [headerSection, qrSection];
     elements.forEach((el, i) => {
         if (el) animateElement(el, i * 200);
     });
+    
+    // Применяем transform для user-info после загрузки
+    if (userInfo) {
+        setTimeout(() => {
+            // Определяем размер экрана и применяем соответствующий transform
+            const screenWidth = window.innerWidth;
+            let transformValue;
+            
+            if (screenWidth <= 360) {
+                transformValue = 'translateY(-70px)'; // Очень маленькие экраны
+            } else if (screenWidth <= 480) {
+                transformValue = 'translateY(-80px)'; // Мобильные устройства
+            } else {
+                transformValue = 'translateY(-60px)'; // Десктоп
+            }
+            
+            userInfo.style.transform = transformValue;
+        }, 500);
+    }
     
     // Обработчик кнопки "О кафе" (пустой)
     if (cafeBtnEl) {
@@ -369,6 +389,23 @@ document.addEventListener('DOMContentLoaded', function() {
         const container = document.querySelector('.container');
         if (container) {
             container.style.minHeight = `${window.innerHeight}px`;
+        }
+        
+        // Обновляем transform для user-info при изменении размера экрана
+        const userInfo = document.querySelector('.user-info');
+        if (userInfo) {
+            const screenWidth = window.innerWidth;
+            let transformValue;
+            
+            if (screenWidth <= 360) {
+                transformValue = 'translateY(-70px)';
+            } else if (screenWidth <= 480) {
+                transformValue = 'translateY(-80px)';
+            } else {
+                transformValue = 'translateY(-60px)';
+            }
+            
+            userInfo.style.transform = transformValue;
         }
     }
     
