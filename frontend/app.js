@@ -292,10 +292,37 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 500);
     }
     
-    // Обработчик кнопки "О кафе" (пустой)
+    // Обработчик кнопки "О кафе"
     if (cafeBtnEl) {
         cafeBtnEl.onclick = function() {
-            // Ничего не делаем
+            const cafeOverlay = document.getElementById('cafeOverlay');
+            if (cafeOverlay) {
+                cafeOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Предотвращаем прокрутку фона
+            }
+        };
+    }
+
+    // Обработчик закрытия модального окна
+    const closeBtn = document.getElementById('closeBtn');
+    if (closeBtn) {
+        closeBtn.onclick = function() {
+            const cafeOverlay = document.getElementById('cafeOverlay');
+            if (cafeOverlay) {
+                cafeOverlay.classList.remove('active');
+                document.body.style.overflow = 'auto'; // Восстанавливаем прокрутку
+            }
+        };
+    }
+
+    // Закрытие по клику на фон
+    const cafeOverlay = document.getElementById('cafeOverlay');
+    if (cafeOverlay) {
+        cafeOverlay.onclick = function(e) {
+            if (e.target === cafeOverlay) {
+                cafeOverlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
         };
     }
 

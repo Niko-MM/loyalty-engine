@@ -461,15 +461,17 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.9);
             z-index: 1000;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
             opacity: 0;
             visibility: hidden;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
+            overflow-y: auto;
+            padding: 20px;
         }
 
         .cafe-overlay.active {
@@ -481,14 +483,16 @@
             background: rgba(0,0,0,0.95);
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 24px;
-            padding: 40px;
-            max-width: 360px;
-            width: 90%;
-            text-align: center;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            text-align: left;
             transform: translateY(50px) scale(0.9);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             backdrop-filter: blur(30px);
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
         .cafe-overlay.active .cafe-content {
@@ -496,20 +500,121 @@
         }
 
         .cafe-title {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+            margin-bottom: 25px;
+            text-align: center;
+            background: linear-gradient(135deg, #22c55e 0%, #ffffff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .cafe-text {
-            font-size: 1.1rem;
+            font-size: 1rem;
             line-height: 1.6;
             color: rgba(255,255,255,0.9);
+        }
+
+        /* Секции информации */
+        .info-section, .locations-section, .contact-section {
             margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .info-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .info-section h3, .locations-section h3, .contact-section h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .info-section p {
+            margin-bottom: 15px;
+            color: rgba(255,255,255,0.8);
+            text-align: justify;
+        }
+
+        .info-section strong {
+            color: #22c55e;
+            font-weight: 600;
+        }
+
+        /* Сетка адресов */
+        .locations-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .location-card {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .location-card:hover {
+            background: rgba(255,255,255,0.12);
+            transform: translateY(-2px);
+        }
+
+        .location-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #22c55e;
+            margin-bottom: 8px;
+        }
+
+        .location-address {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 5px;
+        }
+
+        .location-hours {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Контакты */
+        .contact-info {
+            text-align: center;
+        }
+
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 25px;
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            background: rgba(34, 197, 94, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .contact-icon {
+            font-size: 1.2rem;
         }
 
         .close-btn {
@@ -761,18 +866,50 @@
             }
             
             .cafe-content {
-                padding: 30px 20px;
-                max-width: 320px;
+                padding: 20px 15px;
+                max-width: 100%;
+                margin-top: 10px;
+                margin-bottom: 10px;
             }
             
             .cafe-title {
-                font-size: 1.6rem;
-                margin-bottom: 15px;
+                font-size: 1.8rem;
+                margin-bottom: 20px;
             }
             
             .cafe-text {
+                font-size: 0.95rem;
+            }
+
+            .info-section, .locations-section, .contact-section {
+                margin-bottom: 20px;
+                padding: 15px;
+            }
+
+            .info-section h3, .locations-section h3, .contact-section h3 {
+                font-size: 1.2rem;
+                margin-bottom: 12px;
+            }
+
+            .location-card {
+                padding: 12px;
+            }
+
+            .location-name {
                 font-size: 1rem;
-                margin-bottom: 25px;
+            }
+
+            .location-address {
+                font-size: 0.9rem;
+            }
+
+            .location-hours {
+                font-size: 0.85rem;
+            }
+
+            .contact-link {
+                padding: 12px 20px;
+                font-size: 1rem;
             }
         }
         
@@ -948,8 +1085,73 @@
     <div class="cafe-overlay" id="cafeOverlay">
         <button class="close-btn" id="closeBtn">×</button>
         <div class="cafe-content">
-            <div class="cafe-title">О нашем кафе</div>
-            <div class="cafe-text" id="cafeText">Загрузка информации...</div>
+            <div class="cafe-title">О TastyLab</div>
+            <div class="cafe-text" id="cafeText">
+                <div class="info-section">
+                    <div class="info-icon">🌱</div>
+                    <h3>TastyLab GREEN</h3>
+                    <p>Правильное и сбалансированное питание для <strong>ВСЕХ</strong>, кто заботится о своем <strong>ЗДОРОВЬЕ</strong>.</p>
+                    <p>Профессиональная ассоциация поваров, кондитеров и пекарей, специализирующихся на приготовлении вкуснейших блюд и десертов европейской, китайской, итальянской и японской кухни в Калининграде.</p>
+                </div>
+                
+                <div class="locations-section">
+                    <div class="info-icon">📍</div>
+                    <h3>Наши точки в Калининграде</h3>
+                    <div class="locations-grid">
+                        <div class="location-card">
+                            <div class="location-name">TastyLab</div>
+                            <div class="location-address">Проспект Мира 17 А</div>
+                            <div class="location-hours">🕐 Работает круглосуточно</div>
+                        </div>
+                        <div class="location-card">
+                            <div class="location-name">TastyLab</div>
+                            <div class="location-address">Проспект Мира, 142</div>
+                            <div class="location-hours">🕐 Работает круглосуточно</div>
+                        </div>
+                        <div class="location-card">
+                            <div class="location-name">TastyLab</div>
+                            <div class="location-address">Проспект Мира 64 А</div>
+                            <div class="location-hours">🕐 Работает круглосуточно</div>
+                        </div>
+                        <div class="location-card">
+                            <div class="location-name">TastyLab GREEN</div>
+                            <div class="location-address">Площадь Победы 10</div>
+                            <div class="location-hours">🕐 Работает круглосуточно</div>
+                        </div>
+                        <div class="location-card">
+                            <div class="location-name">TastyLab GREEN</div>
+                            <div class="location-address">Проспект Победы 54 А</div>
+                            <div class="location-hours">🕐 Работает круглосуточно</div>
+                        </div>
+                        <div class="location-card">
+                            <div class="location-name">TastyLab GREEN</div>
+                            <div class="location-address">Улица Согласия, 44</div>
+                            <div class="location-hours">🕐 Работает круглосуточно</div>
+                        </div>
+                        <div class="location-card">
+                            <div class="location-name">TastyLab GREEN</div>
+                            <div class="location-address">Автомобильная 18</div>
+                            <div class="location-hours">🕐 Работает круглосуточно</div>
+                        </div>
+                        <div class="location-card">
+                            <div class="location-name">TastyLab GREEN</div>
+                            <div class="location-address">Улица Сержанта Колоскова, 1Б</div>
+                            <div class="location-hours">🕐 Работает круглосуточно</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-section">
+                    <div class="info-icon">📞</div>
+                    <h3>Контроль качества</h3>
+                    <div class="contact-info">
+                        <a href="tel:+79217102187" class="contact-link">
+                            <span class="contact-icon">📱</span>
+                            +7 (921) 710-21-87
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -962,6 +1164,6 @@
         <button class="menu-btn" id="loyalty-btn">Система лояльности</button>
     </div>
     
-    <script src="app.js?v=2.6"></script>
+    <script src="app.js?v=2.7"></script>
 </body>
 </html>
