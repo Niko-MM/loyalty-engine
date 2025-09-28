@@ -217,6 +217,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             const data = await profileResp.json();
                             currentUser = {
                                 id: telegramId,
+                                telegram_id: telegramId,
                                 nick_name: data.nick_name,
                                 points: data.points,
                                 qr_code: data.qr_code
@@ -238,6 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Сохраняем данные пользователя
                 currentUser = {
                     id: telegramId,
+                    telegram_id: telegramId,
                     nick_name: data.nick_name,
                     points: data.points,
                     qr_code: data.qr_code
@@ -415,19 +417,30 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             // Получаем telegram_id пользователя
             const telegramId = currentUser?.telegram_id;
+            console.log('Current user:', currentUser);
+            console.log('Telegram ID:', telegramId);
+            
             if (!telegramId) {
+                console.log('No telegram_id found, showing empty history');
                 allTransactions = [];
                 visibleCount = 10;
                 renderTransactions();
                 return;
             }
             
-            const response = await fetch(`/api/transactions/history?user_id=${telegramId}`);
+            const apiUrl = `/api/transactions/history?user_id=${telegramId}`;
+            console.log('Fetching from:', apiUrl);
+            
+            const response = await fetch(apiUrl);
+            console.log('Response status:', response.status);
+            
             if (!response.ok) {
-                throw new Error('Ошибка загрузки транзакций');
+                throw new Error(`Ошибка загрузки транзакций: ${response.status}`);
             }
             
             allTransactions = await response.json();
+            console.log('Loaded transactions:', allTransactions);
+            
             // Сортируем по дате (новые сверху)
             allTransactions.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
             
