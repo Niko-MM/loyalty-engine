@@ -438,14 +438,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            const apiUrl = `/api/transactions/history?user_id=${parseInt(telegramId)}`;
-            updateDebugInfo('api', `API: ${apiUrl} (user_id как число)`);
+            const apiUrl = `/api/transactions/history?user_id=${telegramId}`;
+            updateDebugInfo('api', `API: ${apiUrl} (user_id как строка)`);
             
             const response = await fetch(apiUrl);
             updateDebugInfo('api', `API: Статус ${response.status}`);
             
             if (!response.ok) {
-                throw new Error(`Ошибка загрузки транзакций: ${response.status}`);
+                // Получаем детали ошибки
+                let errorDetails = '';
+                try {
+                    const errorData = await response.json();
+                    errorDetails = ` - ${JSON.stringify(errorData)}`;
+                } catch (e) {
+                    errorDetails = ` - ${response.statusText}`;
+                }
+                throw new Error(`Ошибка загрузки транзакций: ${response.status}${errorDetails}`);
             }
             
             allTransactions = await response.json();
