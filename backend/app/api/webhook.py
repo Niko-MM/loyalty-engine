@@ -13,7 +13,6 @@ async def handle_transaction_webhook(payload: WebhookTransaction):
         amount = payload.amount
         discount_used = payload.discount_used
         cafe_id = payload.cafe_id
-        points_change = payload.points_change
 
         user = await get_user_by_telegram_id(user_id)
         if not user:

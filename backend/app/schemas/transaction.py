@@ -20,6 +20,6 @@ class WebhookTransaction(BaseModel):
     amount: int
     discount_used: int
     cafe_id: int
-    points_change: int
+
 
 
