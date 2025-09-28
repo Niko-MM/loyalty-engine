@@ -423,7 +423,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Показываем информацию о пользователе
             if (currentUser) {
-                updateDebugInfo('user', `Пользователь: ${currentUser.nick_name || 'Без имени'}, ID: ${telegramId || 'НЕТ'}`);
+                const userIdAsNumber = parseInt(telegramId);
+                updateDebugInfo('user', `Пользователь: ${currentUser.nick_name || 'Без имени'}, ID: ${telegramId} (тип: ${typeof telegramId}, как число: ${userIdAsNumber})`);
             } else {
                 updateDebugInfo('user', 'Пользователь: НЕ НАЙДЕН');
             }
@@ -437,8 +438,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            const apiUrl = `/api/transactions/history?user_id=${telegramId}`;
-            updateDebugInfo('api', `API: ${apiUrl}`);
+            const apiUrl = `/api/transactions/history?user_id=${parseInt(telegramId)}`;
+            updateDebugInfo('api', `API: ${apiUrl} (user_id как число)`);
             
             const response = await fetch(apiUrl);
             updateDebugInfo('api', `API: Статус ${response.status}`);
