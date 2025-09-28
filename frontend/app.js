@@ -501,13 +501,6 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    // Обработчик кнопки истории (пустой)
-    const historyBtn = document.getElementById('history-btn');
-    if (historyBtn) {
-        historyBtn.onclick = function() {
-            // Ничего не делаем
-        };
-    }
 
     
     // Простой клик на QR-код без анимаций
