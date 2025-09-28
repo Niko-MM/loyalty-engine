@@ -307,13 +307,37 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
+    // Обработчик кнопки "Система лояльности"
+    const loyaltyBtnEl = document.getElementById('loyalty-btn');
+    if (loyaltyBtnEl) {
+        loyaltyBtnEl.onclick = function() {
+            const loyaltyOverlay = document.getElementById('loyaltyOverlay');
+            const closeBtn = document.getElementById('closeBtn');
+            if (loyaltyOverlay) {
+                loyaltyOverlay.classList.add('active');
+                if (closeBtn) {
+                    closeBtn.classList.add('show');
+                }
+                document.body.style.overflow = 'hidden'; // Предотвращаем прокрутку фона
+            }
+        };
+    }
+
     // Обработчик закрытия модального окна
     const closeBtn = document.getElementById('closeBtn');
     if (closeBtn) {
         closeBtn.onclick = function() {
             const cafeOverlay = document.getElementById('cafeOverlay');
-            if (cafeOverlay) {
+            const loyaltyOverlay = document.getElementById('loyaltyOverlay');
+            
+            if (cafeOverlay && cafeOverlay.classList.contains('active')) {
                 cafeOverlay.classList.remove('active');
+                closeBtn.classList.remove('show');
+                document.body.style.overflow = 'auto'; // Восстанавливаем прокрутку
+            }
+            
+            if (loyaltyOverlay && loyaltyOverlay.classList.contains('active')) {
+                loyaltyOverlay.classList.remove('active');
                 closeBtn.classList.remove('show');
                 document.body.style.overflow = 'auto'; // Восстанавливаем прокрутку
             }
@@ -326,6 +350,17 @@ document.addEventListener('DOMContentLoaded', function() {
         cafeOverlay.onclick = function(e) {
             if (e.target === cafeOverlay) {
                 cafeOverlay.classList.remove('active');
+                closeBtn.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            }
+        };
+    }
+
+    const loyaltyOverlay = document.getElementById('loyaltyOverlay');
+    if (loyaltyOverlay) {
+        loyaltyOverlay.onclick = function(e) {
+            if (e.target === loyaltyOverlay) {
+                loyaltyOverlay.classList.remove('active');
                 closeBtn.classList.remove('show');
                 document.body.style.overflow = 'auto';
             }

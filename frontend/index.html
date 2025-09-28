@@ -639,6 +639,74 @@
             transform: translateY(-50%) scale(0.95);
         }
 
+        /* Модальное окно системы лояльности */
+        .loyalty-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            backdrop-filter: blur(15px);
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .loyalty-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .loyalty-content {
+            background: rgba(0,0,0,0.95);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            text-align: left;
+            transform: translateY(50px) scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(30px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .loyalty-overlay.active .loyalty-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .loyalty-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .faq-item p {
+            margin: 8px 0;
+        }
+
+        .faq-item strong {
+            color: #22c55e;
+        }
+
         /* Нижнее меню */
         .bottom-menu {
             width: 100%;
@@ -1160,6 +1228,54 @@
     <!-- Крестик для закрытия модального окна -->
     <button class="close-btn" id="closeBtn">×</button>
     
+    <!-- Модальное окно системы лояльности -->
+    <div class="loyalty-overlay" id="loyaltyOverlay">
+        <div class="loyalty-content">
+            <div class="loyalty-text" id="loyaltyText">
+                <div class="info-section">
+                    <h3>💎 Система лояльности</h3>
+                    <p>Наккапливайте баллы за покупки и получайте скидки!</p>
+                </div>
+                
+                <div class="info-section">
+                    <h3>🎁 Начисление баллов</h3>
+                    <p><strong>1 балл = 1 рубль</strong></p>
+                    <p>Баллы начисляются автоматически при каждой покупке. Покажите QR-код кассиру, и баллы будут добавлены на ваш счет.</p>
+                </div>
+                
+                <div class="info-section">
+                    <h3>💰 Использование баллов</h3>
+                    <p>Баллы идут в скидку на следующую покупку.</p>
+                    <p><strong>Пример:</strong> Кофе стоит 200 рублей, у вас 150 баллов → к оплате 50 рублей</p>
+                </div>
+                
+                <div class="info-section">
+                    <h3>📱 Как пользоваться</h3>
+                    <p>1. Покажите QR-код кассиру при покупке</p>
+                    <p>2. Баллы начисляются автоматически</p>
+                    <p>3. При следующей покупке скажите "списать баллы"</p>
+                    <p>4. Проверяйте баланс в этом приложении</p>
+                </div>
+                
+                <div class="info-section">
+                    <h3>❓ Частые вопросы</h3>
+                    <div class="faq-item">
+                        <p><strong>Вопрос:</strong> Действует ли накопление баллов на товар со скидкой?</p>
+                        <p><strong>Ответ:</strong> Нет, баллы копятся только при покупке товаров без скидки.</p>
+                    </div>
+                    <div class="faq-item">
+                        <p><strong>Вопрос:</strong> Есть срок жизни баллов?</p>
+                        <p><strong>Ответ:</strong> Нет, баллами можно пользоваться в любой момент.</p>
+                    </div>
+                    <div class="faq-item">
+                        <p><strong>Вопрос:</strong> Можно ли объединять баллы с другими скидками?</p>
+                        <p><strong>Ответ:</strong> Да, баллы можно использовать вместе с акциями и скидками.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div class="bottom-menu">
         <button class="menu-btn" id="history-btn">История покупок</button>
         <button id="cafe-btn" class="action-btn">
@@ -1169,6 +1285,6 @@
         <button class="menu-btn" id="loyalty-btn">Система лояльности</button>
     </div>
     
-    <script src="app.js?v=3.6"></script>
+    <script src="app.js?v=3.7"></script>
 </body>
 </html>
