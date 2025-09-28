@@ -469,16 +469,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const date = new Date(transaction.created_at);
             const formattedDate = formatDate(date);
             const isPositive = transaction.points_change > 0;
+            const pointsText = isPositive ? `+${transaction.points_change}` : `${transaction.points_change}`;
             
             return `
                 <div class="transaction-item">
-                    <div class="transaction-info">
+                    <div class="transaction-left">
                         <div class="transaction-date">${formattedDate}</div>
-                        <div class="transaction-points">${transaction.points_change} баллов</div>
+                        <div class="transaction-cafe">Кафе ID: ${transaction.cafe_id}</div>
                     </div>
-                    <div class="transaction-amount ${isPositive ? 'positive' : 'negative'}">
-                        ${isPositive ? '+' : ''}${transaction.amount}₽
-                    </div>
+                    <div class="transaction-points ${isPositive ? 'positive' : 'negative'}">${pointsText}</div>
                 </div>
             `;
         }).join('');
