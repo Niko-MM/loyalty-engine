@@ -414,24 +414,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Загрузка транзакций
     async function loadTransactions() {
-        // Обновляем отладочную информацию
-        updateDebugInfo('user', 'Проверяем пользователя...');
-        
         try {
             // Получаем telegram_id пользователя
             const telegramId = currentUser?.telegram_id;
             
-            // Показываем информацию о пользователе
-            if (currentUser) {
-                const userIdAsNumber = parseInt(telegramId);
-                updateDebugInfo('user', `Пользователь: ${currentUser.nick_name || 'Без имени'}, ID: ${telegramId} (тип: ${typeof telegramId}, как число: ${userIdAsNumber})`);
-            } else {
-                updateDebugInfo('user', 'Пользователь: НЕ НАЙДЕН');
-            }
-            
             if (!telegramId) {
-                updateDebugInfo('api', 'API: НЕ ВЫЗЫВАЕТСЯ (нет telegram_id)');
-                updateDebugInfo('data', 'Данные: ПУСТО (нет telegram_id)');
                 allTransactions = [];
                 visibleCount = 10;
                 renderTransactions();
@@ -439,26 +426,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             const apiUrl = `/transactions/history?user_id=${telegramId}`;
-            updateDebugInfo('api', `API: ${apiUrl} (user_id как строка)`);
-            updateDebugInfo('api', `CURL: curl "http://localhost:8000/transactions/history?user_id=325938757"`);
-            
             const response = await fetch(apiUrl);
-            updateDebugInfo('api', `API: Статус ${response.status}`);
             
             if (!response.ok) {
-                // Получаем детали ошибки
-                let errorDetails = '';
-                try {
-                    const errorData = await response.json();
-                    errorDetails = ` - ${JSON.stringify(errorData)}`;
-                } catch (e) {
-                    errorDetails = ` - ${response.statusText}`;
-                }
-                throw new Error(`Ошибка загрузки транзакций: ${response.status}${errorDetails}`);
+                throw new Error(`Ошибка загрузки транзакций: ${response.status}`);
             }
             
             allTransactions = await response.json();
-            updateDebugInfo('data', `Данные: ${allTransactions.length} транзакций`);
             
             // Сортируем по дате (новые сверху)
             allTransactions.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -466,21 +440,13 @@ document.addEventListener('DOMContentLoaded', function() {
             visibleCount = 10;
             renderTransactions();
         } catch (error) {
-            updateDebugInfo('api', `API: ОШИБКА - ${error.message}`);
-            updateDebugInfo('data', 'Данные: ПУСТО (ошибка API)');
+            console.error('Ошибка загрузки транзакций:', error);
             allTransactions = [];
             visibleCount = 10;
             renderTransactions();
         }
     }
 
-    // Функция для обновления отладочной информации
-    function updateDebugInfo(type, message) {
-        const element = document.getElementById(`debug${type.charAt(0).toUpperCase() + type.slice(1)}`);
-        if (element) {
-            element.textContent = message;
-        }
-    }
 
 
     // Отображение транзакций

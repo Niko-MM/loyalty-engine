@@ -1416,26 +1416,19 @@
     <!-- Модальное окно истории покупок -->
     <div class="history-overlay" id="historyOverlay">
         <div class="history-content">
-            <div class="history-text" id="historyText">
-                <div class="info-section">
-                    <h3>📊 История покупок</h3>
-                </div>
-                
-                <div class="debug-info" id="debugInfo" style="background: rgba(255,0,0,0.1); padding: 10px; margin: 10px 0; border-radius: 8px; font-size: 0.9rem; color: #ff6b6b;">
-                    <div>🔍 Отладка:</div>
-                    <div id="debugUser">Пользователь: загрузка...</div>
-                    <div id="debugApi">API: загрузка...</div>
-                    <div id="debugData">Данные: загрузка...</div>
-                </div>
-                
-                <div class="transactions-list" id="transactionsList">
-                    <!-- Транзакции будут загружены через JavaScript -->
-                </div>
-                
-                <div class="show-more-container" id="showMoreContainer" style="display: none;">
-                    <button class="show-more-btn" id="showMoreBtn">Показать еще 10</button>
-                </div>
+        <div class="history-text" id="historyText">
+            <div class="info-section">
+                <h3>📊 История покупок</h3>
             </div>
+            
+            <div class="transactions-list" id="transactionsList">
+                <!-- Транзакции будут загружены через JavaScript -->
+            </div>
+            
+            <div class="show-more-container" id="showMoreContainer" style="display: none;">
+                <button class="show-more-btn" id="showMoreBtn">Показать еще 10</button>
+            </div>
+        </div>
         </div>
     </div>
     
@@ -1448,6 +1441,6 @@
         <button class="menu-btn" id="loyalty-btn">Система лояльности</button>
     </div>
     
-    <script src="app.js?v=4.6"></script>
+    <script src="app.js?v=4.7"></script>
 </body>
 </html>
