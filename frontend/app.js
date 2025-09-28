@@ -414,14 +414,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Загрузка транзакций
     async function loadTransactions() {
+        // Обновляем отладочную информацию
+        updateDebugInfo('user', 'Проверяем пользователя...');
+        
         try {
             // Получаем telegram_id пользователя
             const telegramId = currentUser?.telegram_id;
-            console.log('Current user:', currentUser);
-            console.log('Telegram ID:', telegramId);
+            
+            // Показываем информацию о пользователе
+            if (currentUser) {
+                updateDebugInfo('user', `Пользователь: ${currentUser.nick_name || 'Без имени'}, ID: ${telegramId || 'НЕТ'}`);
+            } else {
+                updateDebugInfo('user', 'Пользователь: НЕ НАЙДЕН');
+            }
             
             if (!telegramId) {
-                console.log('No telegram_id found, showing empty history');
+                updateDebugInfo('api', 'API: НЕ ВЫЗЫВАЕТСЯ (нет telegram_id)');
+                updateDebugInfo('data', 'Данные: ПУСТО (нет telegram_id)');
                 allTransactions = [];
                 visibleCount = 10;
                 renderTransactions();
@@ -429,17 +438,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             const apiUrl = `/api/transactions/history?user_id=${telegramId}`;
-            console.log('Fetching from:', apiUrl);
+            updateDebugInfo('api', `API: ${apiUrl}`);
             
             const response = await fetch(apiUrl);
-            console.log('Response status:', response.status);
+            updateDebugInfo('api', `API: Статус ${response.status}`);
             
             if (!response.ok) {
                 throw new Error(`Ошибка загрузки транзакций: ${response.status}`);
             }
             
             allTransactions = await response.json();
-            console.log('Loaded transactions:', allTransactions);
+            updateDebugInfo('data', `Данные: ${allTransactions.length} транзакций`);
             
             // Сортируем по дате (новые сверху)
             allTransactions.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -447,10 +456,19 @@ document.addEventListener('DOMContentLoaded', function() {
             visibleCount = 10;
             renderTransactions();
         } catch (error) {
-            console.error('Ошибка загрузки транзакций:', error);
+            updateDebugInfo('api', `API: ОШИБКА - ${error.message}`);
+            updateDebugInfo('data', 'Данные: ПУСТО (ошибка API)');
             allTransactions = [];
             visibleCount = 10;
             renderTransactions();
+        }
+    }
+
+    // Функция для обновления отладочной информации
+    function updateDebugInfo(type, message) {
+        const element = document.getElementById(`debug${type.charAt(0).toUpperCase() + type.slice(1)}`);
+        if (element) {
+            element.textContent = message;
         }
     }
 
