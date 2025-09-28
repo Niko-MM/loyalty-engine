@@ -438,8 +438,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            const apiUrl = `/api/transactions/history?user_id=${telegramId}`;
+            const apiUrl = `/transactions/history?user_id=${telegramId}`;
             updateDebugInfo('api', `API: ${apiUrl} (user_id как строка)`);
+            updateDebugInfo('api', `CURL: curl "http://localhost:8000/transactions/history?user_id=325938757"`);
             
             const response = await fetch(apiUrl);
             updateDebugInfo('api', `API: Статус ${response.status}`);
