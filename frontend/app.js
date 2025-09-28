@@ -323,12 +323,30 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
+    // Обработчик кнопки "История покупок"
+    const historyBtnEl = document.getElementById('history-btn');
+    if (historyBtnEl) {
+        historyBtnEl.onclick = function() {
+            const historyOverlay = document.getElementById('historyOverlay');
+            const closeBtn = document.getElementById('closeBtn');
+            if (historyOverlay) {
+                historyOverlay.classList.add('active');
+                if (closeBtn) {
+                    closeBtn.classList.add('show');
+                }
+                document.body.style.overflow = 'hidden'; // Предотвращаем прокрутку фона
+                loadTransactions(); // Загружаем транзакции при открытии
+            }
+        };
+    }
+
     // Обработчик закрытия модального окна
     const closeBtn = document.getElementById('closeBtn');
     if (closeBtn) {
         closeBtn.onclick = function() {
             const cafeOverlay = document.getElementById('cafeOverlay');
             const loyaltyOverlay = document.getElementById('loyaltyOverlay');
+            const historyOverlay = document.getElementById('historyOverlay');
             
             if (cafeOverlay && cafeOverlay.classList.contains('active')) {
                 cafeOverlay.classList.remove('active');
@@ -338,6 +356,12 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (loyaltyOverlay && loyaltyOverlay.classList.contains('active')) {
                 loyaltyOverlay.classList.remove('active');
+                closeBtn.classList.remove('show');
+                document.body.style.overflow = 'auto'; // Восстанавливаем прокрутку
+            }
+            
+            if (historyOverlay && historyOverlay.classList.contains('active')) {
+                historyOverlay.classList.remove('active');
                 closeBtn.classList.remove('show');
                 document.body.style.overflow = 'auto'; // Восстанавливаем прокрутку
             }
@@ -367,9 +391,115 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
+    const historyOverlay = document.getElementById('historyOverlay');
+    if (historyOverlay) {
+        historyOverlay.onclick = function(e) {
+            if (e.target === historyOverlay) {
+                historyOverlay.classList.remove('active');
+                closeBtn.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            }
+        };
+    }
+
     // Обработчики swipe-жестов
     document.addEventListener('touchstart', handleTouchStart, { passive: true });
     document.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+    // Переменные для истории покупок
+    let allTransactions = [];
+    let visibleCount = 10;
+
+    // Загрузка транзакций
+    async function loadTransactions() {
+        try {
+            // Получаем telegram_id пользователя
+            const telegramId = currentUser?.telegram_id;
+            if (!telegramId) {
+                allTransactions = [];
+                visibleCount = 10;
+                renderTransactions();
+                return;
+            }
+            
+            const response = await fetch(`/api/transactions/history?user_id=${telegramId}`);
+            if (!response.ok) {
+                throw new Error('Ошибка загрузки транзакций');
+            }
+            
+            allTransactions = await response.json();
+            // Сортируем по дате (новые сверху)
+            allTransactions.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            
+            visibleCount = 10;
+            renderTransactions();
+        } catch (error) {
+            console.error('Ошибка загрузки транзакций:', error);
+            allTransactions = [];
+            visibleCount = 10;
+            renderTransactions();
+        }
+    }
+
+
+    // Отображение транзакций
+    function renderTransactions() {
+        const transactionsList = document.getElementById('transactionsList');
+        const showMoreContainer = document.getElementById('showMoreContainer');
+        
+        if (!transactionsList) return;
+        
+        if (allTransactions.length === 0) {
+            transactionsList.innerHTML = '<div class="no-transactions">История покупок пуста</div>';
+            showMoreContainer.style.display = 'none';
+            return;
+        }
+        
+        const visible = allTransactions.slice(0, visibleCount);
+        const hasMore = allTransactions.length > visibleCount;
+        
+        transactionsList.innerHTML = visible.map(transaction => {
+            const date = new Date(transaction.created_at);
+            const formattedDate = formatDate(date);
+            const isPositive = transaction.points_change > 0;
+            
+            return `
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <div class="transaction-date">${formattedDate}</div>
+                        <div class="transaction-points">${transaction.points_change} баллов</div>
+                    </div>
+                    <div class="transaction-amount ${isPositive ? 'positive' : 'negative'}">
+                        ${isPositive ? '+' : ''}${transaction.amount}₽
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        // Показываем/скрываем кнопку "Показать еще"
+        if (hasMore) {
+            showMoreContainer.style.display = 'block';
+        } else {
+            showMoreContainer.style.display = 'none';
+        }
+    }
+
+    // Форматирование даты
+    function formatDate(date) {
+        const months = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+        const day = date.getDate();
+        const month = months[date.getMonth()];
+        return `${day} ${month}`;
+    }
+
+    // Обработчик кнопки "Показать еще"
+    const showMoreBtn = document.getElementById('showMoreBtn');
+    if (showMoreBtn) {
+        showMoreBtn.onclick = function() {
+            visibleCount += 10;
+            renderTransactions();
+        };
+    }
 
     // Обработчик кнопки истории (пустой)
     const historyBtn = document.getElementById('history-btn');
