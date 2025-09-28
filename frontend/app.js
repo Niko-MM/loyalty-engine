@@ -457,7 +457,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!transactionsList) return;
         
         if (allTransactions.length === 0) {
-            transactionsList.innerHTML = '<div class="no-transactions">История покупок пуста</div>';
+            transactionsList.innerHTML = '<div class="no-transactions">История баллов пуста</div>';
             showMoreContainer.style.display = 'none';
             return;
         }
