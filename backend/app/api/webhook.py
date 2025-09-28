@@ -1,18 +1,19 @@
 from fastapi import APIRouter, HTTPException, status
 from app.repository.transaction import create_transaction
 from app.repository.user import update_user_points, get_user_by_telegram_id
+from app.schemas.transaction import WebhookTransaction
 
 router = APIRouter()
 
 
 @router.post("/transaction_webhook")
-async def handle_transaction_webhook(data: dict):
+async def handle_transaction_webhook(payload: WebhookTransaction):
     try:
-        user_id = data["user_id"]
-        amount = data["amount"]
-        discount_used = data["discount_used"]
-        cafe_id = data["cafe_id"]
-        points_change = 0
+        user_id = int(payload.user_id)
+        amount = payload.amount
+        discount_used = payload.discount_used
+        cafe_id = payload.cafe_id
+        points_change = payload.points_change
 
         user = await get_user_by_telegram_id(user_id)
         if not user:

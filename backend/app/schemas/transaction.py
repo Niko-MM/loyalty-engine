@@ -14,3 +14,12 @@ class TransactionOut(BaseModel):
     class Config:
         from_attributes = True
 
+
+class WebhookTransaction(BaseModel):
+    user_id: str
+    amount: int
+    discount_used: int
+    cafe_id: int
+    points_change: int
+
+
