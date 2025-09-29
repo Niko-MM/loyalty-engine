@@ -1,7 +1,8 @@
 from aiogram import Router
 from aiogram.filters import Command
-from aiogram.types import Message
+from aiogram.types import Message, FSInputFile
 import httpx
+import os
 
 
 router = Router()
@@ -25,10 +26,21 @@ async def start_handler(msg: Message):
                 },
                 timeout=10.0,
             )
+            photo = FSInputFile("bot/assets/welcome.JPG")
+            await msg.answer_photo(photo=photo)
+            await msg.answer(
+                f'🎉 Привет, {msg.from_user.username or "друг"}!\n\n'
+                'Добро пожаловать в TastyLab!\n'
+                'Ваша карта лояльности готова!\n\n'
+                'Здесь вы можете:\n'
+                '• Посмотреть баланс баллов\n'
+                '• Изучить историю покупок\n'
+                '• Узнать об акциях\n'
+                '• Найти ближайшее кафе\n\n'
+                ' Нажмите на кнопку "Открыть карту лояльности" как показано на картинке выше!'
+            )
             if response.status_code == 500:
                 await msg.answer("⚠️ Что-то пошло не так. Попробуйте позже.")
-            if response.status_code == 200:
-                await msg.answer(f"Здравствуйте {nick_name} 😉")
     except httpx.TimeoutException:
         await msg.answer("⏳ Сервер не отвечает. Попробуйте через минуту.")
     except httpx.RequestError as e:
