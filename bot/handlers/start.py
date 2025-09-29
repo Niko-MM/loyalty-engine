@@ -27,7 +27,7 @@ async def start_handler(msg: Message):
             '• Изучить историю покупок\n'
             '• Узнать об акциях\n'
             '• Найти ближайшее кафе\n\n'
-            ' Нажмите на кнопку "Открыть карту лояльности" как показано на картинке выше!'
+            ' Нажмите на кнопку "Открыть карту лояльности" как показано на картинке ниже!'
         )
         photo = FSInputFile("/var/www/loyalty_system/loyalty-engine/bot/assets/pic.jpeg")
         await msg.answer_photo(photo=photo)
