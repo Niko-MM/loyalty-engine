@@ -25,7 +25,7 @@ async def start_handler(msg: Message):
                 },
                 timeout=10.0,
             )
-            photo = FSInputFile("bot/assets/welcome.JPG")
+            photo = FSInputFile("bot/assets/pic.jpeg")
             await msg.answer_photo(photo=photo)
             await msg.answer(
                 f'🎉 Привет, {msg.from_user.username or "друг"}!\n\n'
