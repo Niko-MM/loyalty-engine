@@ -9,6 +9,10 @@ import asyncio
 
 async def main():
     bot = Bot(token=bot_settings.BOT_TOKEN)
+    
+    # Отключаем webhook, чтобы избежать конфликтов с polling
+    await bot.delete_webhook(drop_pending_updates=True)
+    
     dp = Dispatcher()
     dp.include_router(rt)
     await dp.start_polling(bot)
