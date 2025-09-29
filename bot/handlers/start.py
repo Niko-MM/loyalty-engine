@@ -18,7 +18,6 @@ async def start_handler(msg: Message):
     
     # Отправляем фото и приветствие
     try:
-        photo = FSInputFile("/var/www/loyalty_system/loyalty-engine/bot/assets/pic.jpeg")
         await msg.answer(
             f'🎉 Привет, {msg.from_user.username or "друг"}!\n\n'
             'Добро пожаловать в TastyLab!\n'
@@ -30,6 +29,7 @@ async def start_handler(msg: Message):
             '• Найти ближайшее кафе\n\n'
             ' Нажмите на кнопку "Открыть карту лояльности" как показано на картинке выше!'
         )
+        photo = FSInputFile("/var/www/loyalty_system/loyalty-engine/bot/assets/pic.jpeg")
         await msg.answer_photo(photo=photo)
     except Exception as e:
         await msg.answer(f"❌ Ошибка при отправке фото: {str(e)}")
