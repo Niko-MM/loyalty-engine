@@ -9,6 +9,7 @@ router = Router()
 
 @router.message(Command("start"))
 async def start_handler(msg: Message):
+    print(f"DEBUG: Получена команда /start от пользователя {msg.from_user.id if msg.from_user else 'Unknown'}")
     if not msg.from_user:
         await msg.answer("Не удалось определить пользователя.")
         return
